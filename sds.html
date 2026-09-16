@@ -1,27 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <meta
     name="description"
-    content="Ridge Rock Safety Data Sheet library for fuels, paving materials, concrete products, maintenance chemicals, solvents, and fire safety products."
+    content="Search and browse Ridge Rock Safety Data Sheets by product, manufacturer, or category."
   >
 
   <title>SDS Library | Ridge Rock Safety Hub</title>
 
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="sds-library.css">
+  <link
+    rel="icon"
+    href="favicon.ico"
+    type="image/x-icon"
+  >
 
-  <script src="sds-data.js" defer></script>
-  <script src="sds-library.js" defer></script>
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="sds-library.css"
+  >
+
+  <script
+    src="sds-data.js"
+    defer
+  ></script>
+
+  <script
+    src="sds-library.js"
+    defer
+  ></script>
 </head>
+
 
 <body>
 
-  <!-- HEADER -->
   <header class="site-header">
     <div class="shell header-inner">
 
@@ -67,18 +91,19 @@
 
     <!-- HERO -->
     <section class="sds-hero">
+
       <div class="shell sds-hero-inner">
 
         <div>
-          <p class="eyebrow">Hazard Communication</p>
-
-          <h1>
+          <p class="eyebrow">
             Safety Data Sheets
-          </h1>
+          </p>
+
+          <h1>SDS Library</h1>
 
           <p class="sds-hero-lead">
-            Quickly find safety information for products and materials
-            used in Ridge Rock operations.
+            Quickly find Safety Data Sheets for
+            products and materials used by Ridge Rock.
           </p>
         </div>
 
@@ -90,100 +115,114 @@
         </a>
 
       </div>
+
     </section>
 
 
-    <!-- SDS LIBRARY -->
-    <section class="section sds-section">
+    <!-- COMPLETE PACKAGE -->
+    <section class="section sds-package-section">
+
       <div class="shell">
 
+        <div class="complete-package-card">
 
-        <!-- COMPLETE SDS PACKAGE -->
-        <div class="sds-complete-package">
+          <div class="complete-package-content">
 
-          <div>
-            <p class="eyebrow">
-              Complete Collection
-            </p>
+            <div class="complete-package-icon" aria-hidden="true">
+              SDS
+            </div>
 
-            <h2>
-              Complete Ridge Rock SDS Package
-            </h2>
+            <div>
+              <p class="eyebrow">
+                Complete Collection
+              </p>
 
-            <p>
-              View the complete Ridge Rock SDS collection and
-              chemical inventory in one document.
-            </p>
+              <h2 id="completePackageTitle">
+                Complete Ridge Rock SDS Package
+              </h2>
+
+              <p id="completePackageDescription">
+                View the complete Ridge Rock SDS collection
+                and chemical inventory in one document.
+              </p>
+            </div>
+
           </div>
 
           <a
             class="button button-primary"
-            id="completePackageLink"
+            id="completePackageButton"
+            href="#"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Open Complete SDS Package
+            Open Complete Package
             <span aria-hidden="true">↗</span>
           </a>
 
         </div>
 
 
-        <!-- SDS BROWSING TIP -->
-        <div class="sds-tip">
+        <!-- BROWSING TIP -->
+        <div class="sds-browse-tip">
 
-          <div
-            class="sds-tip-icon"
+          <span
+            class="sds-browse-tip-icon"
             aria-hidden="true"
           >
             i
-          </div>
+          </span>
 
           <div>
-
-            <p class="sds-tip-label">
+            <strong>
               Looking for a specific SDS?
-            </p>
+            </strong>
 
             <p>
               Search by product or manufacturer below,
-              or browse by category to quickly find the sheet you need.
+              or browse by category to quickly find the
+              sheet you need.
             </p>
-
           </div>
 
         </div>
 
+      </div>
 
-        <!-- LIBRARY SUMMARY -->
-        <div class="sds-summary">
+    </section>
+
+
+    <!-- LIBRARY -->
+    <section class="section sds-library-section">
+
+      <div class="shell">
+
+        <!-- SUMMARY -->
+        <div class="sds-library-summary">
 
           <div>
-
             <p class="eyebrow">
-              SDS Library
+              Browse the Library
             </p>
 
             <h2>
-              Find the right sheet fast.
+              Find the right SDS fast.
             </h2>
 
             <p>
-              Search by material, product name,
-              manufacturer, or category.
+              Search by product, manufacturer,
+              category, or keyword.
             </p>
-
           </div>
 
+          <div class="sds-library-total">
 
-          <div class="sds-total">
-
-            <strong id="sdsTotal">
+            <strong id="sdsLibraryTotal">
               0
             </strong>
 
             <span>
-              SDSs available
+              SDS available
             </span>
 
           </div>
@@ -192,74 +231,124 @@
 
 
         <!-- SEARCH -->
-        <div class="sds-search-wrap">
+        <div
+          class="sds-search-area"
+          id="sdsSearchArea"
+        >
 
-          <label
-            class="sr-only"
-            for="sdsSearch"
-          >
-            Search Safety Data Sheets
-          </label>
-
-          <span
-            class="sds-search-icon"
-            aria-hidden="true"
-          >
-            ⌕
-          </span>
-
-          <input
-            id="sdsSearch"
-            type="search"
-            placeholder="Search product, material, or manufacturer..."
-            autocomplete="off"
+          <form
+            class="sds-search-wrap"
+            id="sdsSearchForm"
+            role="search"
           >
 
-          <button
-            id="sdsClearSearch"
-            type="button"
-            hidden
-            aria-label="Clear search"
-          >
-            ×
-          </button>
+            <label
+              class="sr-only"
+              for="sdsSearch"
+            >
+              Search Safety Data Sheets
+            </label>
+
+            <span
+              class="sds-search-icon"
+              aria-hidden="true"
+            >
+              ⌕
+            </span>
+
+            <input
+              id="sdsSearch"
+              type="search"
+              placeholder="Search SDS library..."
+              autocomplete="off"
+              aria-autocomplete="list"
+              aria-controls="sdsSuggestions"
+              aria-expanded="false"
+            >
+
+            <div
+              class="sds-search-actions"
+              id="sdsSearchActions"
+              aria-hidden="true"
+            >
+
+              <button
+                class="sds-clear-search"
+                id="sdsClearSearch"
+                type="button"
+                aria-label="Clear search"
+              >
+                ×
+              </button>
+
+              <button
+                class="sds-search-button"
+                type="submit"
+              >
+                Search
+              </button>
+
+            </div>
+
+          </form>
+
+
+          <!-- AUTOCOMPLETE -->
+          <div
+            class="sds-suggestions"
+            id="sdsSuggestions"
+            role="listbox"
+            aria-label="SDS suggestions"
+          ></div>
+
+
+          <p
+            class="sds-search-status"
+            id="sdsSearchStatus"
+            aria-live="polite"
+          ></p>
 
         </div>
 
 
-        <!-- CATEGORY FILTERS -->
-        <div class="sds-category-header">
+        <!-- CATEGORIES -->
+        <div
+          class="sds-category-section"
+          id="sdsCategorySection"
+        >
 
-          <div>
+          <div class="sds-category-header">
 
-            <h2>
-              Browse by Category
-            </h2>
+            <div>
+              <h2>
+                Browse by Category
+              </h2>
 
-            <p>
-              Choose a category to show only the SDSs you need.
-            </p>
+              <p>
+                View all SDS or choose a category
+                to filter the library.
+              </p>
+            </div>
+
+            <button
+              class="sds-category-reset"
+              id="sdsCategoryReset"
+              type="button"
+              hidden
+            >
+              Clear Category
+            </button>
 
           </div>
 
 
-          <button
-            class="sds-category-reset"
-            id="sdsCategoryReset"
-            type="button"
-            hidden
-          >
-            Clear Category
-          </button>
+          <div
+            class="sds-category-grid"
+            id="sdsCategoryGrid"
+            aria-label="SDS categories"
+          ></div>
 
         </div>
-
-
-        <div
-          class="sds-category-grid"
-          id="sdsCategoryGrid"
-          aria-label="SDS categories"
-        ></div>
 
 
         <!-- RESULTS HEADING -->
@@ -274,25 +363,18 @@
               class="eyebrow"
               id="sdsResultsEyebrow"
             >
-              All Safety Data Sheets
+              SDS Library
             </p>
 
             <h2 id="sdsResultsTitle">
-              All SDSs
+              All Safety Data Sheets
             </h2>
 
             <p id="sdsResultsDescription">
-              Browse all Safety Data Sheets currently
-              in the Ridge Rock library.
+              Browse all available Safety Data Sheets.
             </p>
 
           </div>
-
-
-          <span
-            class="sds-result-count"
-            id="sdsResultCount"
-          ></span>
 
         </div>
 
@@ -313,25 +395,44 @@
         >
 
           <h3>
-            No Safety Data Sheets found
+            No matching SDS found
           </h3>
 
           <p>
-            Try a different product,
-            manufacturer, or category.
+            Try another product or manufacturer name.
+            If the SDS you need isn't listed, contact Safety.
           </p>
 
         </div>
 
-
       </div>
+
     </section>
 
   </main>
 
 
-  <!-- FOOTER -->
+  <!-- FLOATING BACK TO CATEGORIES -->
+  <button
+    class="sds-back-to-categories"
+    id="sdsBackToCategories"
+    type="button"
+    aria-label="Back to SDS categories"
+  >
+
+    <span aria-hidden="true">
+      ↑
+    </span>
+
+    <span class="sds-back-to-categories-text">
+      Back to Categories
+    </span>
+
+  </button>
+
+
   <footer class="site-footer">
+
     <div class="shell footer-inner">
 
       <div>
@@ -348,10 +449,12 @@
 
       </div>
 
-      <p id="sdsLastUpdated"></p>
+      <p id="lastUpdated"></p>
 
     </div>
+
   </footer>
 
 </body>
+
 </html>
