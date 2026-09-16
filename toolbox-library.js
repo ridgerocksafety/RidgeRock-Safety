@@ -657,6 +657,19 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       renderResults();
+
+      /*
+        Remove focus from the search field.
+
+        On phones and tablets, this closes
+        the on-screen keyboard before the
+        page moves down to the results.
+
+        On desktop, it simply removes the
+        text cursor from the search field.
+      */
+      searchInput.blur();
+
       scrollToResults();
     }
   );
