@@ -21,7 +21,6 @@
 
 <body>
 
-  <!-- HEADER -->
   <header class="site-header">
     <div class="shell header-inner">
 
@@ -65,7 +64,6 @@
 
   <main id="top">
 
-    <!-- LIBRARY HERO -->
     <section class="library-hero">
       <div class="shell library-hero-inner">
 
@@ -91,11 +89,9 @@
     </section>
 
 
-    <!-- TOOLBOX TALK LIBRARY -->
     <section class="section library-section">
       <div class="shell">
 
-        <!-- LIBRARY SUMMARY -->
         <div class="library-summary">
 
           <div>
@@ -118,7 +114,10 @@
 
 
         <!-- SEARCH -->
-        <div class="library-search-area">
+        <div
+          class="library-search-area"
+          id="librarySearchArea"
+        >
 
           <form
             class="library-search-wrap"
@@ -145,6 +144,9 @@
               type="search"
               placeholder="Search toolbox talks..."
               autocomplete="off"
+              aria-autocomplete="list"
+              aria-controls="librarySuggestions"
+              aria-expanded="false"
             >
 
             <div
@@ -174,6 +176,16 @@
 
           </form>
 
+
+          <!-- AUTOCOMPLETE SUGGESTIONS -->
+          <div
+            class="library-suggestions"
+            id="librarySuggestions"
+            role="listbox"
+            aria-label="Toolbox Talk suggestions"
+          ></div>
+
+
           <p
             class="library-search-status"
             id="librarySearchStatus"
@@ -183,7 +195,7 @@
         </div>
 
 
-        <!-- CATEGORY FILTERS -->
+        <!-- CATEGORIES -->
         <div
           class="category-section"
           id="categorySection"
@@ -210,7 +222,6 @@
             </button>
 
           </div>
-
 
           <div
             class="category-grid"
@@ -247,7 +258,6 @@
         </div>
 
 
-        <!-- TALK CARDS -->
         <div
           class="talk-grid"
           id="libraryTalkGrid"
@@ -255,7 +265,6 @@
         ></div>
 
 
-        <!-- EMPTY STATE -->
         <div
           class="empty-state"
           id="libraryEmptyState"
@@ -289,7 +298,6 @@
   </button>
 
 
-  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="shell footer-inner">
 
