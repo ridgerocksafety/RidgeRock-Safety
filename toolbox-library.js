@@ -97,9 +97,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /*
-    "all" means all Toolbox Talks are selected.
+    The category the user selected while
+    browsing normally.
   */
   let selectedCategory = "all";
+
+  /*
+    Tracks whether the library is currently
+    being controlled by search instead of
+    a category.
+  */
+  let searchMode = false;
 
 
   /* PAGE DATA */
@@ -136,7 +144,12 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-  /* SCROLL TO RESULTS */
+  /* HELPERS */
+
+  function hasSearchQuery() {
+    return searchInput.value.trim().length > 0;
+  }
+
 
   function scrollToResults() {
     if (!resultsSection) return;
@@ -148,12 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* SEARCH STATE */
-
-  function hasSearchQuery() {
-    return searchInput.value.trim().length > 0;
-  }
-
+  /*
+    Update the search bar controls and
+    the small blue live-result message.
+  */
   function updateSearchUI(resultCount = 0) {
     const hasQuery =
       hasSearchQuery();
@@ -190,30 +201,63 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* CLEAR SEARCH */
+  /*
+    This one upper-right control has two jobs:
 
-  function clearSearch({
-    focus = false,
-    render = true
+    Category mode:
+      Clear Category
+
+    Search mode:
+      Clear Search
+  */
+  function updateResetControl({
+    animateSearch = false
   } = {}) {
-    searchInput.value = "";
 
-    updateSearchUI();
+    categoryReset.classList.remove(
+      "search-control-enter"
+    );
 
-    if (render) {
-      renderResults();
+    if (searchMode) {
+      categoryReset.hidden = false;
+      categoryReset.textContent =
+        "Clear Search";
+
+      if (animateSearch) {
+        /*
+          Force a reflow so the animation
+          reliably starts only when entering
+          search mode.
+        */
+        void categoryReset.offsetWidth;
+
+        categoryReset.classList.add(
+          "search-control-enter"
+        );
+      }
+
+      return;
     }
 
-    if (focus) {
-      searchInput.focus();
+    if (selectedCategory !== "all") {
+      categoryReset.hidden = false;
+      categoryReset.textContent =
+        "Clear Category";
+      return;
     }
+
+    categoryReset.hidden = true;
   }
 
 
   /* CATEGORIES */
 
-  function renderCategories() {
+  function renderCategories({
+    animateSearchControl = false
+  } = {}) {
+
     const allSelected =
+      !searchMode &&
       selectedCategory === "all";
 
     const allTalksButton = `
@@ -224,8 +268,10 @@ document.addEventListener("DOMContentLoaded", () => {
         aria-pressed="${allSelected}"
       >
         <span class="category-card-name">
-          ${allSelected ? "✓ " : ""}
-          All Talks
+          <span
+            class="category-check"
+            aria-hidden="true"
+          >✓</span>All Talks
         </span>
 
         <span class="category-card-count">
@@ -242,6 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
             categoryCounts[category];
 
           const selected =
+            !searchMode &&
             selectedCategory === category;
 
           return `
@@ -252,8 +299,10 @@ document.addEventListener("DOMContentLoaded", () => {
               aria-pressed="${selected}"
             >
               <span class="category-card-name">
-                ${selected ? "✓ " : ""}
-                ${escapeHTML(category)}
+                <span
+                  class="category-check"
+                  aria-hidden="true"
+                >✓</span>${escapeHTML(category)}
               </span>
 
               <span class="category-card-count">
@@ -268,8 +317,10 @@ document.addEventListener("DOMContentLoaded", () => {
     categoryGrid.innerHTML =
       allTalksButton + categoryButtons;
 
-    categoryReset.hidden =
-      selectedCategory === "all";
+    updateResetControl({
+      animateSearch:
+        animateSearchControl
+    });
 
     categoryGrid
       .querySelectorAll(".category-card")
@@ -278,15 +329,13 @@ document.addEventListener("DOMContentLoaded", () => {
           "click",
           () => {
             /*
-              Categories and search are separate.
-
-              Clicking ANY category clears the
-              current search first.
+              Clicking a category immediately
+              ends search mode.
             */
-            clearSearch({
-              focus: false,
-              render: false
-            });
+            searchInput.value = "";
+            searchMode = false;
+
+            updateSearchUI();
 
             selectedCategory =
               button.dataset.category;
@@ -361,7 +410,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* GET RESULTS */
+  /* FILTERING */
 
   function getFilteredTalks() {
     const query =
@@ -372,10 +421,10 @@ document.addEventListener("DOMContentLoaded", () => {
     /*
       SEARCH MODE
 
-      Search ALWAYS searches the complete library.
-      The selected category is ignored.
+      Search always searches the ENTIRE
+      Toolbox Talk library.
     */
-    if (query) {
+    if (searchMode && query) {
       const words =
         query
           .split(/\s+/)
@@ -400,36 +449,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /*
-      CATEGORY MODE
+      NORMAL CATEGORY MODE
     */
-    return activeTalks.filter(talk => {
-      return (
-        selectedCategory === "all" ||
-        talk.category === selectedCategory
-      );
-    });
+    return activeTalks.filter(talk =>
+      selectedCategory === "all" ||
+      talk.category === selectedCategory
+    );
   }
 
 
-  /* RENDER RESULTS */
+  /* RESULTS */
 
   function renderResults() {
     const query =
       searchInput.value.trim();
-
-    /*
-      As soon as a search begins, switch the
-      visible category state back to All Talks.
-
-      Search is always global.
-    */
-    if (
-      query &&
-      selectedCategory !== "all"
-    ) {
-      selectedCategory = "all";
-      renderCategories();
-    }
 
     const filtered =
       getFilteredTalks();
@@ -448,7 +481,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* SEARCH RESULTS */
 
-    if (query) {
+    if (searchMode && query) {
       $("#resultsEyebrow").textContent =
         "Search Results";
 
@@ -512,23 +545,103 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  /* ENTER SEARCH MODE */
+
+  function enterSearchMode() {
+    if (searchMode) {
+      return;
+    }
+
+    searchMode = true;
+
+    /*
+      Re-rendering removes the selected
+      class. CSS makes the selected styling
+      fade away quickly.
+    */
+    renderCategories({
+      animateSearchControl: true
+    });
+  }
+
+
+  /* RESET SEARCH */
+
+  function resetSearch({
+    focusSearch = false
+  } = {}) {
+
+    searchInput.value = "";
+
+    searchMode = false;
+
+    /*
+      A cleared search always returns
+      to All Talks.
+    */
+    selectedCategory = "all";
+
+    updateSearchUI();
+
+    /*
+      Re-rendering adds is-selected back
+      to All Talks. CSS smoothly fades the
+      blue selection back in.
+    */
+    renderCategories();
+    renderResults();
+
+    if (focusSearch) {
+      searchInput.focus();
+    }
+  }
+
+
   /* LIVE SEARCH */
 
   searchInput.addEventListener(
     "input",
     () => {
-      /*
-        Typing NEVER scrolls the page.
 
-        It only updates the results and
-        live result count.
+      const hasQuery =
+        hasSearchQuery();
+
+
+      /*
+        FIRST CHARACTER
+
+        Enter search mode and smoothly
+        release the selected category.
+      */
+      if (hasQuery && !searchMode) {
+        enterSearchMode();
+      }
+
+
+      /*
+        BACKSPACED ALL THE WAY TO EMPTY
+
+        Return to All Talks automatically.
+      */
+      if (!hasQuery && searchMode) {
+        resetSearch({
+          focusSearch: true
+        });
+
+        return;
+      }
+
+
+      /*
+        Results update live, but typing
+        never scrolls the page.
       */
       renderResults();
     }
   );
 
 
-  /* ENTER / SEARCH BUTTON */
+  /* SEARCH / ENTER */
 
   searchForm.addEventListener(
     "submit",
@@ -539,65 +652,51 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      if (!searchMode) {
+        enterSearchMode();
+      }
+
       renderResults();
       scrollToResults();
     }
   );
 
 
-  /* CLEAR X */
+  /* GRAY X */
 
   clearSearchButton.addEventListener(
     "click",
     () => {
-      selectedCategory = "all";
-
-      clearSearch({
-        focus: true,
-        render: false
+      resetSearch({
+        focusSearch: true
       });
-
-      renderCategories();
-      renderResults();
     }
   );
 
 
-  /* ESCAPE CLEARS SEARCH */
-
-  searchInput.addEventListener(
-    "keydown",
-    event => {
-      if (
-        event.key === "Escape" &&
-        hasSearchQuery()
-      ) {
-        event.preventDefault();
-
-        selectedCategory = "all";
-
-        clearSearch({
-          focus: true,
-          render: false
-        });
-
-        renderCategories();
-        renderResults();
-      }
-    }
-  );
-
-
-  /* CLEAR CATEGORY */
+  /* UPPER-RIGHT CLEAR CONTROL */
 
   categoryReset.addEventListener(
     "click",
     () => {
-      clearSearch({
-        focus: false,
-        render: false
-      });
 
+      /*
+        SEARCH MODE:
+        "Clear Search"
+      */
+      if (searchMode) {
+        resetSearch({
+          focusSearch: false
+        });
+
+        return;
+      }
+
+
+      /*
+        CATEGORY MODE:
+        "Clear Category"
+      */
       selectedCategory = "all";
 
       renderCategories();
@@ -630,16 +729,19 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+
   window.addEventListener(
     "scroll",
     updateBackToCategoriesButton,
     { passive: true }
   );
 
+
   window.addEventListener(
     "resize",
     updateBackToCategoriesButton
   );
+
 
   backToCategories.addEventListener(
     "click",
@@ -660,6 +762,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mainNav =
     $("#mainNav");
 
+
   menuButton.addEventListener(
     "click",
     () => {
@@ -672,6 +775,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
   );
+
 
   mainNav
     .querySelectorAll("a")
