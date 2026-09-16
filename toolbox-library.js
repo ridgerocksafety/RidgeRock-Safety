@@ -36,14 +36,16 @@ document.addEventListener("DOMContentLoaded", () => {
     "Confined Space"
   ];
 
-  const $ = selector => document.querySelector(selector);
+  const $ = selector =>
+    document.querySelector(selector);
 
-  const escapeHTML = value => String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+  const escapeHTML = value =>
+    String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
 
   const numberLabel = number =>
     String(number).padStart(3, "0");
@@ -51,19 +53,40 @@ document.addEventListener("DOMContentLoaded", () => {
   const pdfURL = fileName =>
     `toolbox-talks/${encodeURIComponent(fileName)}`;
 
-  const searchInput = $("#librarySearch");
-  const clearSearchButton = $("#libraryClearSearch");
-  const categoryGrid = $("#categoryGrid");
-  const categoryReset = $("#categoryReset");
-  const talkGrid = $("#libraryTalkGrid");
-  const emptyState = $("#libraryEmptyState");
-  const resultsSection = $("#libraryResults");
+  const searchInput =
+    $("#librarySearch");
+
+  const clearSearchButton =
+    $("#libraryClearSearch");
+
+  const categoryGrid =
+    $("#categoryGrid");
+
+  const categoryReset =
+    $("#categoryReset");
+
+  const categorySection =
+    $("#categorySection");
+
+  const talkGrid =
+    $("#libraryTalkGrid");
+
+  const emptyState =
+    $("#libraryEmptyState");
+
+  const resultsSection =
+    $("#libraryResults");
+
+  const backToCategories =
+    $("#backToCategories");
 
   /*
-    "all" means the All Talks filter is selected.
-    Individual categories use their normal category name.
+    "all" means every Toolbox Talk is displayed.
   */
   let selectedCategory = "all";
+
+
+  /* GENERAL PAGE DATA */
 
   $("#lastUpdated").textContent =
     `Last updated: ${data.lastUpdated}`;
@@ -71,20 +94,33 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#libraryTotal").textContent =
     activeTalks.length;
 
-  const categoryCounts = activeTalks.reduce((counts, talk) => {
-    counts[talk.category] =
-      (counts[talk.category] || 0) + 1;
 
-    return counts;
-  }, {});
+  /* CATEGORY COUNTS */
+
+  const categoryCounts =
+    activeTalks.reduce((counts, talk) => {
+      counts[talk.category] =
+        (counts[talk.category] || 0) + 1;
+
+      return counts;
+    }, {});
 
   const usedCategories = categoryOrder
-    .filter(category => categoryCounts[category] > 0)
+    .filter(category =>
+      categoryCounts[category] > 0
+    )
     .concat(
       Object.keys(categoryCounts)
-        .filter(category => !categoryOrder.includes(category))
-        .sort((a, b) => a.localeCompare(b))
+        .filter(category =>
+          !categoryOrder.includes(category)
+        )
+        .sort((a, b) =>
+          a.localeCompare(b)
+        )
     );
+
+
+  /* SCROLL TO RESULTS */
 
   function scrollToResults() {
     if (!resultsSection) return;
@@ -96,6 +132,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }, 100);
   }
+
+
+  /* CATEGORY BUTTONS */
 
   function renderCategories() {
     const allSelected =
@@ -120,57 +159,61 @@ document.addEventListener("DOMContentLoaded", () => {
       </button>
     `;
 
-    const categoryButtons = usedCategories
-      .map(category => {
-        const count = categoryCounts[category];
+    const categoryButtons =
+      usedCategories
+        .map(category => {
+          const count =
+            categoryCounts[category];
 
-        const selected =
-          selectedCategory === category;
+          const selected =
+            selectedCategory === category;
 
-        return `
-          <button
-            class="category-card ${selected ? "is-selected" : ""}"
-            type="button"
-            data-category="${escapeHTML(category)}"
-            aria-pressed="${selected}"
-          >
-            <span class="category-card-name">
-              ${selected ? "✓ " : ""}
-              ${escapeHTML(category)}
-            </span>
+          return `
+            <button
+              class="category-card ${selected ? "is-selected" : ""}"
+              type="button"
+              data-category="${escapeHTML(category)}"
+              aria-pressed="${selected}"
+            >
+              <span class="category-card-name">
+                ${selected ? "✓ " : ""}
+                ${escapeHTML(category)}
+              </span>
 
-            <span class="category-card-count">
-              <strong>${count}</strong>
-              ${count === 1 ? "talk" : "talks"}
-            </span>
-          </button>
-        `;
-      })
-      .join("");
+              <span class="category-card-count">
+                <strong>${count}</strong>
+                ${count === 1 ? "talk" : "talks"}
+              </span>
+            </button>
+          `;
+        })
+        .join("");
 
     categoryGrid.innerHTML =
       allTalksButton + categoryButtons;
 
-    /*
-      The Clear Category button is only needed
-      when a specific category is selected.
-    */
     categoryReset.hidden =
       selectedCategory === "all";
 
     categoryGrid
       .querySelectorAll(".category-card")
       .forEach(button => {
-        button.addEventListener("click", () => {
-          selectedCategory =
-            button.dataset.category;
+        button.addEventListener(
+          "click",
+          () => {
+            selectedCategory =
+              button.dataset.category;
 
-          renderCategories();
-          renderResults();
-          scrollToResults();
-        });
+            renderCategories();
+            renderResults();
+            scrollToResults();
+          }
+        );
       });
   }
+
+
+  /* TOOLBOX TALK CARDS */
 
   function createTalkCard(talk) {
     const isCurrent =
@@ -179,7 +222,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return `
       <article class="talk-card ${isCurrent ? "is-current" : ""}">
+
         <div class="talk-card-top">
+
           <span class="talk-number">
             ${numberLabel(talk.number)}
           </span>
@@ -187,20 +232,29 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="talk-category">
             ${escapeHTML(talk.category)}
           </span>
+
         </div>
 
         <div>
+
           <div class="title-row">
-            <h3>${escapeHTML(talk.title)}</h3>
+
+            <h3>
+              ${escapeHTML(talk.title)}
+            </h3>
 
             ${
               isCurrent
                 ? '<span class="current-label">Current</span>'
                 : ""
             }
+
           </div>
 
-          <p>${escapeHTML(talk.description)}</p>
+          <p>
+            ${escapeHTML(talk.description)}
+          </p>
+
         </div>
 
         <a
@@ -212,9 +266,13 @@ document.addEventListener("DOMContentLoaded", () => {
           Open Toolbox Talk
           <span aria-hidden="true">↗</span>
         </a>
+
       </article>
     `;
   }
+
+
+  /* FILTER TALKS */
 
   function getFilteredTalks() {
     const query =
@@ -247,9 +305,15 @@ document.addEventListener("DOMContentLoaded", () => {
           haystack.includes(word)
         );
 
-      return matchesCategory && matchesSearch;
+      return (
+        matchesCategory &&
+        matchesSearch
+      );
     });
   }
+
+
+  /* RESULTS */
 
   function renderResults() {
     const query =
@@ -262,16 +326,22 @@ document.addEventListener("DOMContentLoaded", () => {
       query.length === 0;
 
     /*
-      ALWAYS newest to oldest.
+      Always newest to oldest.
     */
     const talksToShow =
       [...filtered]
-        .sort((a, b) => b.number - a.number);
+        .sort(
+          (a, b) =>
+            b.number - a.number
+        );
 
-    /*
-      ALL TALKS — NO SEARCH
-    */
-    if (selectedCategory === "all" && !query) {
+
+    /* ALL TALKS */
+
+    if (
+      selectedCategory === "all" &&
+      !query
+    ) {
       $("#resultsEyebrow").textContent =
         "Toolbox Talk Archive";
 
@@ -286,10 +356,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }, newest to oldest.`;
     }
 
-    /*
-      ALL TALKS — WITH SEARCH
-    */
-    else if (selectedCategory === "all" && query) {
+
+    /* SEARCHING ALL TALKS */
+
+    else if (
+      selectedCategory === "all" &&
+      query
+    ) {
       $("#resultsEyebrow").textContent =
         "Search Results";
 
@@ -304,10 +377,13 @@ document.addEventListener("DOMContentLoaded", () => {
         } matching "${query}".`;
     }
 
-    /*
-      CATEGORY — WITH SEARCH
-    */
-    else if (selectedCategory !== "all" && query) {
+
+    /* CATEGORY + SEARCH */
+
+    else if (
+      selectedCategory !== "all" &&
+      query
+    ) {
       $("#resultsEyebrow").textContent =
         "Filtered Results";
 
@@ -322,9 +398,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } in this category matching "${query}".`;
     }
 
-    /*
-      CATEGORY — NO SEARCH
-    */
+
+    /* CATEGORY ONLY */
+
     else {
       $("#resultsEyebrow").textContent =
         "Toolbox Talk Archive";
@@ -349,48 +425,135 @@ document.addEventListener("DOMContentLoaded", () => {
       talksToShow.length > 0;
   }
 
-  searchInput.addEventListener("input", () => {
-    renderResults();
-  });
 
-  clearSearchButton.addEventListener("click", () => {
-    searchInput.value = "";
-    renderResults();
-    searchInput.focus();
-  });
+  /* SEARCH EVENTS */
 
-  categoryReset.addEventListener("click", () => {
-    selectedCategory = "all";
-    renderCategories();
-    renderResults();
-  });
+  searchInput.addEventListener(
+    "input",
+    () => {
+      renderResults();
+    }
+  );
 
-  const menuButton = $("#menuButton");
-  const mainNav = $("#mainNav");
+  clearSearchButton.addEventListener(
+    "click",
+    () => {
+      searchInput.value = "";
+      renderResults();
+      searchInput.focus();
+    }
+  );
 
-  menuButton.addEventListener("click", () => {
-    const open =
-      mainNav.classList.toggle("open");
 
-    menuButton.setAttribute(
-      "aria-expanded",
-      String(open)
+  /* CLEAR CATEGORY */
+
+  categoryReset.addEventListener(
+    "click",
+    () => {
+      selectedCategory = "all";
+
+      renderCategories();
+      renderResults();
+    }
+  );
+
+
+  /* FLOATING BACK TO CATEGORIES BUTTON */
+
+  function updateBackToCategoriesButton() {
+    if (
+      !categorySection ||
+      !backToCategories
+    ) {
+      return;
+    }
+
+    const categoryBottom =
+      categorySection
+        .getBoundingClientRect()
+        .bottom;
+
+    /*
+      Show the button once the user has
+      scrolled below the category filters.
+
+      Hide it again when the categories
+      are visible.
+    */
+    const shouldShow =
+      categoryBottom < 80;
+
+    backToCategories.classList.toggle(
+      "is-visible",
+      shouldShow
     );
-  });
+  }
+
+  window.addEventListener(
+    "scroll",
+    updateBackToCategoriesButton,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    updateBackToCategoriesButton
+  );
+
+  backToCategories.addEventListener(
+    "click",
+    () => {
+      categorySection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  );
+
+
+  /* MOBILE MENU */
+
+  const menuButton =
+    $("#menuButton");
+
+  const mainNav =
+    $("#mainNav");
+
+  menuButton.addEventListener(
+    "click",
+    () => {
+      const open =
+        mainNav.classList.toggle("open");
+
+      menuButton.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
+    }
+  );
 
   mainNav
     .querySelectorAll("a")
     .forEach(link => {
-      link.addEventListener("click", () => {
-        mainNav.classList.remove("open");
+      link.addEventListener(
+        "click",
+        () => {
+          mainNav.classList.remove(
+            "open"
+          );
 
-        menuButton.setAttribute(
-          "aria-expanded",
-          "false"
-        );
-      });
+          menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+          );
+        }
+      );
     });
+
+
+  /* INITIAL RENDER */
 
   renderCategories();
   renderResults();
+  updateBackToCategoriesButton();
 });
