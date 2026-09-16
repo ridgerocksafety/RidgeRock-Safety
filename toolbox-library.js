@@ -47,6 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+  const escapeRegExp = value =>
+    String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
   const numberLabel = number =>
     String(number).padStart(3, "0");
 
@@ -57,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ELEMENTS */
 
   const searchArea =
-    $(".library-search-area");
+    $("#librarySearchArea");
 
   const searchForm =
     $("#librarySearchForm");
@@ -73,6 +76,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const searchStatus =
     $("#librarySearchStatus");
+
+  const suggestionsBox =
+    $("#librarySuggestions");
 
   const categoryGrid =
     $("#categoryGrid");
@@ -96,18 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
     $("#backToCategories");
 
 
-  /*
-    The category the user selected while
-    browsing normally.
-  */
-  let selectedCategory = "all";
+  /* STATE */
 
-  /*
-    Tracks whether the library is currently
-    being controlled by search instead of
-    a category.
-  */
+  let selectedCategory = "all";
   let searchMode = false;
+
+  let currentSuggestions = [];
+  let activeSuggestionIndex = -1;
 
 
   /* PAGE DATA */
@@ -161,10 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /*
-    Update the search bar controls and
-    the small blue live-result message.
-  */
   function updateSearchUI(resultCount = 0) {
     const hasQuery =
       hasSearchQuery();
@@ -201,15 +198,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /*
-    This one upper-right control has two jobs:
+  /* RESET CONTROL */
 
-    Category mode:
-      Clear Category
-
-    Search mode:
-      Clear Search
-  */
   function updateResetControl({
     animateSearch = false
   } = {}) {
@@ -220,15 +210,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (searchMode) {
       categoryReset.hidden = false;
+
       categoryReset.textContent =
         "Clear Search";
 
       if (animateSearch) {
-        /*
-          Force a reflow so the animation
-          reliably starts only when entering
-          search mode.
-        */
         void categoryReset.offsetWidth;
 
         categoryReset.classList.add(
@@ -241,8 +227,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (selectedCategory !== "all") {
       categoryReset.hidden = false;
+
       categoryReset.textContent =
         "Clear Category";
+
       return;
     }
 
@@ -328,10 +316,8 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener(
           "click",
           () => {
-            /*
-              Clicking a category immediately
-              ends search mode.
-            */
+            closeSuggestions();
+
             searchInput.value = "";
             searchMode = false;
 
@@ -410,7 +396,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* FILTERING */
+  /* SEARCH MATCHING */
+
+  function talkMatchesQuery(talk, query) {
+    const words =
+      query
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    const haystack = [
+      numberLabel(talk.number),
+      talk.title,
+      talk.category,
+      talk.description,
+      talk.keywords || ""
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return words.every(word =>
+      haystack.includes(word)
+    );
+  }
+
 
   function getFilteredTalks() {
     const query =
@@ -418,43 +427,337 @@ document.addEventListener("DOMContentLoaded", () => {
         .trim()
         .toLowerCase();
 
-    /*
-      SEARCH MODE
-
-      Search always searches the ENTIRE
-      Toolbox Talk library.
-    */
     if (searchMode && query) {
-      const words =
-        query
-          .split(/\s+/)
-          .filter(Boolean);
-
-      return activeTalks.filter(talk => {
-        const haystack = [
-          numberLabel(talk.number),
-          talk.title,
-          talk.category,
-          talk.description,
-          talk.keywords || ""
-        ]
-          .join(" ")
-          .toLowerCase();
-
-        return words.every(word =>
-          haystack.includes(word)
-        );
-      });
+      return activeTalks.filter(talk =>
+        talkMatchesQuery(talk, query)
+      );
     }
 
-
-    /*
-      NORMAL CATEGORY MODE
-    */
     return activeTalks.filter(talk =>
       selectedCategory === "all" ||
       talk.category === selectedCategory
     );
+  }
+
+
+  /* SUGGESTION RANKING */
+
+  function suggestionScore(talk, query) {
+    const q =
+      query.toLowerCase();
+
+    const title =
+      talk.title.toLowerCase();
+
+    const category =
+      talk.category.toLowerCase();
+
+    const number =
+      numberLabel(talk.number).toLowerCase();
+
+    const keywords =
+      (talk.keywords || "").toLowerCase();
+
+    const description =
+      talk.description.toLowerCase();
+
+
+    /*
+      Lower score = stronger suggestion.
+    */
+
+    if (title === q) {
+      return 0;
+    }
+
+    if (title.startsWith(q)) {
+      return 10;
+    }
+
+    if (
+      title
+        .split(/\s+/)
+        .some(word =>
+          word.startsWith(q)
+        )
+    ) {
+      return 20;
+    }
+
+    if (title.includes(q)) {
+      return 30;
+    }
+
+    if (number === q) {
+      return 35;
+    }
+
+    if (category.startsWith(q)) {
+      return 40;
+    }
+
+    if (category.includes(q)) {
+      return 50;
+    }
+
+    if (keywords.includes(q)) {
+      return 60;
+    }
+
+    if (description.includes(q)) {
+      return 70;
+    }
+
+    return 999;
+  }
+
+
+  function getSuggestions() {
+    const query =
+      searchInput.value.trim();
+
+    if (query.length < 2) {
+      return [];
+    }
+
+    return activeTalks
+      .map(talk => ({
+        talk,
+        score:
+          suggestionScore(talk, query)
+      }))
+      .filter(item =>
+        item.score < 999
+      )
+      .sort((a, b) => {
+        if (a.score !== b.score) {
+          return a.score - b.score;
+        }
+
+        /*
+          For equally good matches,
+          show newer talks first.
+        */
+        return b.talk.number - a.talk.number;
+      })
+      .slice(0, 3)
+      .map(item => item.talk);
+  }
+
+
+  /* MATCH HIGHLIGHT */
+
+  function highlightTitle(title, query) {
+    const safeTitle =
+      escapeHTML(title);
+
+    const trimmedQuery =
+      query.trim();
+
+    if (!trimmedQuery) {
+      return safeTitle;
+    }
+
+    /*
+      Only highlight the query in the title
+      when the actual title contains it.
+    */
+    const escapedQuery =
+      escapeHTML(trimmedQuery);
+
+    const pattern =
+      new RegExp(
+        `(${escapeRegExp(escapedQuery)})`,
+        "ig"
+      );
+
+    return safeTitle.replace(
+      pattern,
+      "<mark>$1</mark>"
+    );
+  }
+
+
+  /* SUGGESTIONS */
+
+  function closeSuggestions() {
+    currentSuggestions = [];
+    activeSuggestionIndex = -1;
+
+    suggestionsBox.classList.remove(
+      "is-open"
+    );
+
+    suggestionsBox.innerHTML = "";
+
+    searchInput.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+    searchInput.removeAttribute(
+      "aria-activedescendant"
+    );
+  }
+
+
+  function updateActiveSuggestion() {
+    const buttons =
+      suggestionsBox.querySelectorAll(
+        ".library-suggestion"
+      );
+
+    buttons.forEach(
+      (button, index) => {
+        const active =
+          index === activeSuggestionIndex;
+
+        button.classList.toggle(
+          "is-active",
+          active
+        );
+
+        button.setAttribute(
+          "aria-selected",
+          String(active)
+        );
+      }
+    );
+
+    if (activeSuggestionIndex >= 0) {
+      searchInput.setAttribute(
+        "aria-activedescendant",
+        `librarySuggestion-${activeSuggestionIndex}`
+      );
+    }
+
+    else {
+      searchInput.removeAttribute(
+        "aria-activedescendant"
+      );
+    }
+  }
+
+
+  function renderSuggestions() {
+    const query =
+      searchInput.value.trim();
+
+    currentSuggestions =
+      getSuggestions();
+
+    activeSuggestionIndex = -1;
+
+    /*
+      Don't show an empty suggestion box.
+    */
+    if (
+      query.length < 2 ||
+      currentSuggestions.length === 0 ||
+      document.activeElement !== searchInput
+    ) {
+      closeSuggestions();
+      return;
+    }
+
+    suggestionsBox.innerHTML =
+      currentSuggestions
+        .map((talk, index) => `
+          <button
+            class="library-suggestion"
+            id="librarySuggestion-${index}"
+            type="button"
+            role="option"
+            aria-selected="false"
+            data-index="${index}"
+          >
+            <span class="suggestion-category">
+              ${escapeHTML(talk.category)}
+            </span>
+
+            <span class="suggestion-number">
+              ${numberLabel(talk.number)}
+            </span>
+
+            <span class="suggestion-title">
+              ${highlightTitle(
+                talk.title,
+                query
+              )}
+            </span>
+          </button>
+        `)
+        .join("");
+
+    suggestionsBox.classList.add(
+      "is-open"
+    );
+
+    searchInput.setAttribute(
+      "aria-expanded",
+      "true"
+    );
+
+
+    suggestionsBox
+      .querySelectorAll(
+        ".library-suggestion"
+      )
+      .forEach(button => {
+        /*
+          mousedown prevents the input from
+          losing focus before the click fires.
+        */
+        button.addEventListener(
+          "mousedown",
+          event => {
+            event.preventDefault();
+          }
+        );
+
+        button.addEventListener(
+          "click",
+          () => {
+            const index =
+              Number(button.dataset.index);
+
+            chooseSuggestion(index);
+          }
+        );
+      });
+  }
+
+
+  function chooseSuggestion(index) {
+    const talk =
+      currentSuggestions[index];
+
+    if (!talk) {
+      return;
+    }
+
+    /*
+      Fill the field with the actual talk title.
+    */
+    searchInput.value =
+      talk.title;
+
+    searchMode = true;
+
+    closeSuggestions();
+
+    updateSearchUI(1);
+    updateResetControl();
+
+    renderCategories();
+    renderResults();
+
+    /*
+      Close the mobile/tablet keyboard.
+    */
+    searchInput.blur();
+
+    scrollToResults();
   }
 
 
@@ -479,8 +782,6 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /* SEARCH RESULTS */
-
     if (searchMode && query) {
       $("#resultsEyebrow").textContent =
         "Search Results";
@@ -495,9 +796,6 @@ document.addEventListener("DOMContentLoaded", () => {
             : "talks"
         } matching "${query}".`;
     }
-
-
-    /* ALL TALKS */
 
     else if (
       selectedCategory === "all"
@@ -515,9 +813,6 @@ document.addEventListener("DOMContentLoaded", () => {
             : "talks"
         }, newest to oldest.`;
     }
-
-
-    /* CATEGORY */
 
     else {
       $("#resultsEyebrow").textContent =
@@ -554,11 +849,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     searchMode = true;
 
-    /*
-      Re-rendering removes the selected
-      class. CSS makes the selected styling
-      fade away quickly.
-    */
     renderCategories({
       animateSearchControl: true
     });
@@ -571,23 +861,15 @@ document.addEventListener("DOMContentLoaded", () => {
     focusSearch = false
   } = {}) {
 
+    closeSuggestions();
+
     searchInput.value = "";
 
     searchMode = false;
-
-    /*
-      A cleared search always returns
-      to All Talks.
-    */
     selectedCategory = "all";
 
     updateSearchUI();
 
-    /*
-      Re-rendering adds is-selected back
-      to All Talks. CSS smoothly fades the
-      blue selection back in.
-    */
     renderCategories();
     renderResults();
 
@@ -607,22 +889,11 @@ document.addEventListener("DOMContentLoaded", () => {
         hasSearchQuery();
 
 
-      /*
-        FIRST CHARACTER
-
-        Enter search mode and smoothly
-        release the selected category.
-      */
       if (hasQuery && !searchMode) {
         enterSearchMode();
       }
 
 
-      /*
-        BACKSPACED ALL THE WAY TO EMPTY
-
-        Return to All Talks automatically.
-      */
       if (!hasQuery && searchMode) {
         resetSearch({
           focusSearch: true
@@ -632,16 +903,132 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
 
-      /*
-        Results update live, but typing
-        never scrolls the page.
-      */
       renderResults();
+      renderSuggestions();
     }
   );
 
 
-  /* SEARCH / ENTER */
+  /* FOCUS */
+
+  searchInput.addEventListener(
+    "focus",
+    () => {
+      if (
+        searchInput.value.trim().length >= 2
+      ) {
+        renderSuggestions();
+      }
+    }
+  );
+
+
+  /* KEYBOARD NAVIGATION */
+
+  searchInput.addEventListener(
+    "keydown",
+    event => {
+
+      const suggestionsOpen =
+        suggestionsBox.classList.contains(
+          "is-open"
+        );
+
+
+      /*
+        DOWN ARROW
+
+        Nothing is automatically selected
+        when suggestions first appear.
+
+        The user must press down or tap one.
+      */
+      if (
+        event.key === "ArrowDown" &&
+        suggestionsOpen
+      ) {
+        event.preventDefault();
+
+        activeSuggestionIndex++;
+
+        if (
+          activeSuggestionIndex >=
+          currentSuggestions.length
+        ) {
+          activeSuggestionIndex = 0;
+        }
+
+        updateActiveSuggestion();
+
+        return;
+      }
+
+
+      /* UP ARROW */
+
+      if (
+        event.key === "ArrowUp" &&
+        suggestionsOpen
+      ) {
+        event.preventDefault();
+
+        activeSuggestionIndex--;
+
+        if (activeSuggestionIndex < 0) {
+          activeSuggestionIndex =
+            currentSuggestions.length - 1;
+        }
+
+        updateActiveSuggestion();
+
+        return;
+      }
+
+
+      /*
+        ESCAPE
+
+        Only closes suggestions.
+        It does NOT clear their search.
+      */
+      if (
+        event.key === "Escape" &&
+        suggestionsOpen
+      ) {
+        event.preventDefault();
+
+        closeSuggestions();
+
+        return;
+      }
+
+
+      /*
+        ENTER
+
+        If they deliberately highlighted a
+        suggestion with the arrow keys,
+        choose it.
+
+        Otherwise the normal form submit
+        handles Enter as a regular search.
+      */
+      if (
+        event.key === "Enter" &&
+        suggestionsOpen &&
+        activeSuggestionIndex >= 0
+      ) {
+        event.preventDefault();
+
+        chooseSuggestion(
+          activeSuggestionIndex
+        );
+      }
+    }
+  );
+
+
+  /* SEARCH BUTTON / NORMAL ENTER */
 
   searchForm.addEventListener(
     "submit",
@@ -656,17 +1043,12 @@ document.addEventListener("DOMContentLoaded", () => {
         enterSearchMode();
       }
 
+      closeSuggestions();
+
       renderResults();
 
       /*
-        Remove focus from the search field.
-
-        On phones and tablets, this closes
-        the on-screen keyboard before the
-        page moves down to the results.
-
-        On desktop, it simply removes the
-        text cursor from the search field.
+        Close mobile/tablet keyboard.
       */
       searchInput.blur();
 
@@ -687,16 +1069,12 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* UPPER-RIGHT CLEAR CONTROL */
+  /* CLEAR SEARCH / CLEAR CATEGORY */
 
   categoryReset.addEventListener(
     "click",
     () => {
 
-      /*
-        SEARCH MODE:
-        "Clear Search"
-      */
       if (searchMode) {
         resetSearch({
           focusSearch: false
@@ -705,11 +1083,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-
-      /*
-        CATEGORY MODE:
-        "Clear Category"
-      */
       selectedCategory = "all";
 
       renderCategories();
@@ -718,7 +1091,21 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* FLOATING BACK TO CATEGORIES */
+  /* CLICK OUTSIDE SEARCH */
+
+  document.addEventListener(
+    "pointerdown",
+    event => {
+      if (
+        !searchArea.contains(event.target)
+      ) {
+        closeSuggestions();
+      }
+    }
+  );
+
+
+  /* BACK TO CATEGORIES */
 
   function updateBackToCategoriesButton() {
     if (
@@ -759,6 +1146,8 @@ document.addEventListener("DOMContentLoaded", () => {
   backToCategories.addEventListener(
     "click",
     () => {
+      closeSuggestions();
+
       categorySection.scrollIntoView({
         behavior: "smooth",
         block: "start"
