@@ -11,7 +11,7 @@
 */
 
 const safetyHubData = {
-  lastUpdated: "September 8, 2026",
+  lastUpdated: "September 16, 2026",
 
   quickLinks: [
     {
@@ -261,13 +261,22 @@ const safetyHubData = {
       keywords: "ppe enforcement personal protective equipment hard hat safety glasses high visibility reflective vest boots written warning foreman compliance",
       active: true
     },
-    {
+        {
       number: 15,
       title: "Safe Trench Entry",
       category: "Excavation",
       description: "Safe trench entry requirements, competent-person inspections, access and exit, cave-in protection, and stop-work authority.",
       fileName: "2026-9-8 Toolbox Talk 015 - Safe Trench Entry.pdf",
       keywords: "trench excavation safe entry competent person cave in protection trench box shoring sloping benching ladder access exit 4 feet 5 feet stop work",
+      active: true
+    },
+    {
+      number: 16,
+      title: "Utility Line Safety",
+      category: "Utility Safety",
+      description: "Safely locating, exposing, and identifying underground utilities before excavation and preventing utility strikes.",
+      fileName: "2026-9-15 Toolbox Talk 016 - Utility Line Safety.pdf",
+      keywords: "utility line safety underground utilities excavation locate expose identify markings 3 feet hand digging vacuum excavation air knife utility strike stop digging",
       active: true
     }
   ]
