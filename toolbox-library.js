@@ -53,11 +53,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const pdfURL = fileName =>
     `toolbox-talks/${encodeURIComponent(fileName)}`;
 
+
+  /* ELEMENTS */
+
+  const searchArea =
+    $(".library-search-area");
+
+  const searchForm =
+    $("#librarySearchForm");
+
   const searchInput =
     $("#librarySearch");
 
+  const searchActions =
+    $("#librarySearchActions");
+
   const clearSearchButton =
     $("#libraryClearSearch");
+
+  const searchStatus =
+    $("#librarySearchStatus");
 
   const categoryGrid =
     $("#categoryGrid");
@@ -80,13 +95,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const backToCategories =
     $("#backToCategories");
 
+
   /*
-    "all" means every Toolbox Talk is displayed.
+    "all" means all Toolbox Talks are selected.
   */
   let selectedCategory = "all";
 
 
-  /* GENERAL PAGE DATA */
+  /* PAGE DATA */
 
   $("#lastUpdated").textContent =
     `Last updated: ${data.lastUpdated}`;
@@ -125,16 +141,76 @@ document.addEventListener("DOMContentLoaded", () => {
   function scrollToResults() {
     if (!resultsSection) return;
 
-    setTimeout(() => {
-      resultsSection.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    }, 100);
+    resultsSection.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   }
 
 
-  /* CATEGORY BUTTONS */
+  /* SEARCH STATE */
+
+  function hasSearchQuery() {
+    return searchInput.value.trim().length > 0;
+  }
+
+  function updateSearchUI(resultCount = 0) {
+    const hasQuery =
+      hasSearchQuery();
+
+    searchArea.classList.toggle(
+      "has-query",
+      hasQuery
+    );
+
+    searchActions.setAttribute(
+      "aria-hidden",
+      String(!hasQuery)
+    );
+
+    if (!hasQuery) {
+      searchStatus.textContent = "";
+      return;
+    }
+
+    if (resultCount === 0) {
+      searchStatus.textContent =
+        "No results found";
+    }
+
+    else if (resultCount === 1) {
+      searchStatus.textContent =
+        "1 result found";
+    }
+
+    else {
+      searchStatus.textContent =
+        `${resultCount} results found`;
+    }
+  }
+
+
+  /* CLEAR SEARCH */
+
+  function clearSearch({
+    focus = false,
+    render = true
+  } = {}) {
+    searchInput.value = "";
+
+    updateSearchUI();
+
+    if (render) {
+      renderResults();
+    }
+
+    if (focus) {
+      searchInput.focus();
+    }
+  }
+
+
+  /* CATEGORIES */
 
   function renderCategories() {
     const allSelected =
@@ -201,6 +277,17 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener(
           "click",
           () => {
+            /*
+              Categories and search are separate.
+
+              Clicking ANY category clears the
+              current search first.
+            */
+            clearSearch({
+              focus: false,
+              render: false
+            });
+
             selectedCategory =
               button.dataset.category;
 
@@ -213,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* TOOLBOX TALK CARDS */
+  /* TALK CARD */
 
   function createTalkCard(talk) {
     const isCurrent =
@@ -221,7 +308,9 @@ document.addEventListener("DOMContentLoaded", () => {
       talk.number === currentTalk.number;
 
     return `
-      <article class="talk-card ${isCurrent ? "is-current" : ""}">
+      <article
+        class="talk-card ${isCurrent ? "is-current" : ""}"
+      >
 
         <div class="talk-card-top">
 
@@ -272,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* FILTER TALKS */
+  /* GET RESULTS */
 
   function getFilteredTalks() {
     const query =
@@ -280,54 +369,71 @@ document.addEventListener("DOMContentLoaded", () => {
         .trim()
         .toLowerCase();
 
-    return activeTalks.filter(talk => {
-      const matchesCategory =
-        selectedCategory === "all" ||
-        talk.category === selectedCategory;
+    /*
+      SEARCH MODE
 
-      const haystack = [
-        numberLabel(talk.number),
-        talk.title,
-        talk.category,
-        talk.description,
-        talk.keywords || ""
-      ]
-        .join(" ")
-        .toLowerCase();
-
+      Search ALWAYS searches the complete library.
+      The selected category is ignored.
+    */
+    if (query) {
       const words =
         query
           .split(/\s+/)
           .filter(Boolean);
 
-      const matchesSearch =
-        words.every(word =>
+      return activeTalks.filter(talk => {
+        const haystack = [
+          numberLabel(talk.number),
+          talk.title,
+          talk.category,
+          talk.description,
+          talk.keywords || ""
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        return words.every(word =>
           haystack.includes(word)
         );
+      });
+    }
 
+
+    /*
+      CATEGORY MODE
+    */
+    return activeTalks.filter(talk => {
       return (
-        matchesCategory &&
-        matchesSearch
+        selectedCategory === "all" ||
+        talk.category === selectedCategory
       );
     });
   }
 
 
-  /* RESULTS */
+  /* RENDER RESULTS */
 
   function renderResults() {
     const query =
       searchInput.value.trim();
 
+    /*
+      As soon as a search begins, switch the
+      visible category state back to All Talks.
+
+      Search is always global.
+    */
+    if (
+      query &&
+      selectedCategory !== "all"
+    ) {
+      selectedCategory = "all";
+      renderCategories();
+    }
+
     const filtered =
       getFilteredTalks();
 
-    clearSearchButton.hidden =
-      query.length === 0;
-
-    /*
-      Always newest to oldest.
-    */
     const talksToShow =
       [...filtered]
         .sort(
@@ -335,12 +441,33 @@ document.addEventListener("DOMContentLoaded", () => {
             b.number - a.number
         );
 
+    updateSearchUI(
+      talksToShow.length
+    );
+
+
+    /* SEARCH RESULTS */
+
+    if (query) {
+      $("#resultsEyebrow").textContent =
+        "Search Results";
+
+      $("#resultsTitle").textContent =
+        "Matching Toolbox Talks";
+
+      $("#resultsDescription").textContent =
+        `${talksToShow.length} ${
+          talksToShow.length === 1
+            ? "talk"
+            : "talks"
+        } matching "${query}".`;
+    }
+
 
     /* ALL TALKS */
 
-    if (
-      selectedCategory === "all" &&
-      !query
+    else if (
+      selectedCategory === "all"
     ) {
       $("#resultsEyebrow").textContent =
         "Toolbox Talk Archive";
@@ -357,49 +484,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* SEARCHING ALL TALKS */
-
-    else if (
-      selectedCategory === "all" &&
-      query
-    ) {
-      $("#resultsEyebrow").textContent =
-        "Search Results";
-
-      $("#resultsTitle").textContent =
-        "Matching Toolbox Talks";
-
-      $("#resultsDescription").textContent =
-        `${talksToShow.length} ${
-          talksToShow.length === 1
-            ? "talk"
-            : "talks"
-        } matching "${query}".`;
-    }
-
-
-    /* CATEGORY + SEARCH */
-
-    else if (
-      selectedCategory !== "all" &&
-      query
-    ) {
-      $("#resultsEyebrow").textContent =
-        "Filtered Results";
-
-      $("#resultsTitle").textContent =
-        selectedCategory;
-
-      $("#resultsDescription").textContent =
-        `${talksToShow.length} ${
-          talksToShow.length === 1
-            ? "talk"
-            : "talks"
-        } in this category matching "${query}".`;
-    }
-
-
-    /* CATEGORY ONLY */
+    /* CATEGORY */
 
     else {
       $("#resultsEyebrow").textContent =
@@ -416,6 +501,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } in this category.`;
     }
 
+
     talkGrid.innerHTML =
       talksToShow
         .map(createTalkCard)
@@ -426,21 +512,78 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* SEARCH EVENTS */
+  /* LIVE SEARCH */
 
   searchInput.addEventListener(
     "input",
     () => {
+      /*
+        Typing NEVER scrolls the page.
+
+        It only updates the results and
+        live result count.
+      */
       renderResults();
     }
   );
 
+
+  /* ENTER / SEARCH BUTTON */
+
+  searchForm.addEventListener(
+    "submit",
+    event => {
+      event.preventDefault();
+
+      if (!hasSearchQuery()) {
+        return;
+      }
+
+      renderResults();
+      scrollToResults();
+    }
+  );
+
+
+  /* CLEAR X */
+
   clearSearchButton.addEventListener(
     "click",
     () => {
-      searchInput.value = "";
+      selectedCategory = "all";
+
+      clearSearch({
+        focus: true,
+        render: false
+      });
+
+      renderCategories();
       renderResults();
-      searchInput.focus();
+    }
+  );
+
+
+  /* ESCAPE CLEARS SEARCH */
+
+  searchInput.addEventListener(
+    "keydown",
+    event => {
+      if (
+        event.key === "Escape" &&
+        hasSearchQuery()
+      ) {
+        event.preventDefault();
+
+        selectedCategory = "all";
+
+        clearSearch({
+          focus: true,
+          render: false
+        });
+
+        renderCategories();
+        renderResults();
+      }
     }
   );
 
@@ -450,6 +593,11 @@ document.addEventListener("DOMContentLoaded", () => {
   categoryReset.addEventListener(
     "click",
     () => {
+      clearSearch({
+        focus: false,
+        render: false
+      });
+
       selectedCategory = "all";
 
       renderCategories();
@@ -458,7 +606,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* FLOATING BACK TO CATEGORIES BUTTON */
+  /* FLOATING BACK TO CATEGORIES */
 
   function updateBackToCategoriesButton() {
     if (
@@ -473,13 +621,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .getBoundingClientRect()
         .bottom;
 
-    /*
-      Show the button once the user has
-      scrolled below the category filters.
-
-      Hide it again when the categories
-      are visible.
-    */
     const shouldShow =
       categoryBottom < 80;
 
