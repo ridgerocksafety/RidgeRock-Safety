@@ -111,15 +111,13 @@
   outline: none;
   box-shadow: var(--shadow-sm);
   font-size: 16px;
+
   transition:
     border-color .18s ease,
-    box-shadow .18s ease;
+    box-shadow .18s ease,
+    padding-right .18s ease;
 }
 
-/*
-  When a search is active, reserve room inside
-  the field for our X and Search button.
-*/
 .library-search-area.has-query
 .library-search-wrap input {
   padding-right: 156px;
@@ -133,7 +131,7 @@
 }
 
 
-/* REMOVE BROWSER'S NATIVE SEARCH X */
+/* REMOVE BROWSER SEARCH X */
 
 .library-search-wrap input::-webkit-search-cancel-button {
   -webkit-appearance: none;
@@ -143,6 +141,7 @@
 
 .library-search-wrap input::-webkit-search-decoration {
   -webkit-appearance: none;
+  appearance: none;
 }
 
 .library-search-wrap input::-ms-clear,
@@ -152,6 +151,8 @@
   height: 0;
 }
 
+
+/* SEARCH ICON */
 
 .library-search-icon {
   position: absolute;
@@ -193,29 +194,78 @@
   pointer-events: auto;
 }
 
+
+/* PERFECTLY CENTERED CLEAR X */
+
 .library-clear-search {
+  position: relative;
+
   width: 34px;
   height: 34px;
-  display: grid;
-  place-items: center;
+  flex: 0 0 34px;
 
   padding: 0;
   border: 0;
   border-radius: 50%;
 
   background: #edf1f4;
-  color: var(--ink);
+  color: transparent;
 
   cursor: pointer;
 
-  font: inherit;
-  font-size: 20px;
-  line-height: 1;
+  font-size: 0;
+  line-height: 0;
+
+  transition:
+    background .15s ease,
+    transform .15s ease;
+}
+
+.library-clear-search::before,
+.library-clear-search::after {
+  content: "";
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 13px;
+  height: 2px;
+
+  border-radius: 999px;
+
+  background: var(--ink);
+
+  transform-origin: center;
+}
+
+.library-clear-search::before {
+  transform:
+    translate(-50%, -50%)
+    rotate(45deg);
+}
+
+.library-clear-search::after {
+  transform:
+    translate(-50%, -50%)
+    rotate(-45deg);
 }
 
 .library-clear-search:hover {
   background: #e0e6eb;
 }
+
+.library-clear-search:active {
+  transform: scale(.94);
+}
+
+.library-clear-search:focus-visible {
+  outline: 3px solid rgba(36,95,150,.18);
+  outline-offset: 2px;
+}
+
+
+/* BLUE SEARCH BUTTON */
 
 .library-search-button {
   min-height: 40px;
@@ -233,7 +283,8 @@
   font-size: 13px;
   font-weight: 850;
 
-  box-shadow: 0 3px 8px rgba(36,95,150,.18);
+  box-shadow:
+    0 3px 8px rgba(36,95,150,.18);
 
   transition:
     background .18s ease,
@@ -251,11 +302,6 @@
 
 /* LIVE SEARCH RESULT COUNT */
 
-/*
-  This is positioned inside the spacing that already
-  exists below the search field, so it does not push
-  the categories down or create layout movement.
-*/
 .library-search-status {
   position: absolute;
   left: 3px;
@@ -299,16 +345,55 @@
 }
 
 .category-header {
+  position: relative;
   margin-bottom: 18px;
 }
 
 .category-reset {
   border: 0;
+  padding: 0;
   background: transparent;
   color: var(--blue-600);
   cursor: pointer;
+  font: inherit;
+  font-size: 13px;
   font-weight: 850;
+
+  opacity: 1;
+  visibility: visible;
+
+  transition:
+    color .15s ease,
+    opacity .18s ease;
 }
+
+.category-reset:hover {
+  color: var(--navy-900);
+}
+
+
+/*
+  JavaScript uses this class when Clear Search
+  first appears.
+
+  It fades IN without affecting layout.
+*/
+.category-reset.search-control-enter {
+  animation: clearSearchFadeIn .18s ease both;
+}
+
+@keyframes clearSearchFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* CATEGORY GRID */
 
 .category-grid {
   display: grid;
@@ -318,6 +403,7 @@
 
 .category-card {
   position: relative;
+
   min-height: 118px;
 
   display: flex;
@@ -341,9 +427,9 @@
 
   transition:
     transform .18s ease,
-    border-color .18s ease,
-    box-shadow .18s ease,
-    background .18s ease;
+    border-color .14s ease,
+    box-shadow .14s ease,
+    background-color .14s ease;
 }
 
 .category-card:hover {
@@ -352,16 +438,26 @@
   box-shadow: var(--shadow-md);
 }
 
+
+/*
+  Selected category.
+
+  The background/border/ring smoothly fade
+  both into and out of the selected state.
+*/
 .category-card.is-selected {
   border-color: var(--blue-600);
-  background: var(--blue-100);
+  background-color: var(--blue-100);
+
   box-shadow:
     0 0 0 3px rgba(36,95,150,.10);
 }
 
 .category-card-name {
   max-width: 100%;
+
   color: var(--navy-900);
+
   font-size: 16px;
   font-weight: 850;
   line-height: 1.25;
@@ -369,6 +465,7 @@
 
 .category-card-count {
   color: var(--muted);
+
   font-size: 12px;
   font-weight: 750;
 }
@@ -380,12 +477,40 @@
 }
 
 
+/*
+  The check mark itself fades instead of
+  appearing/disappearing by rebuilding text.
+*/
+.category-check {
+  display: inline-block;
+
+  width: 17px;
+
+  color: var(--blue-600);
+
+  opacity: 0;
+  transform: scale(.75);
+
+  transition:
+    opacity .13s ease,
+    transform .13s ease;
+}
+
+.category-card.is-selected
+.category-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
 /* RESULTS */
 
 .library-results-heading {
   margin: 52px 0 22px;
   padding-top: 34px;
+
   border-top: 1px solid var(--line);
+
   scroll-margin-top: 105px;
 }
 
@@ -546,6 +671,7 @@
   .library-clear-search {
     width: 32px;
     height: 32px;
+    flex-basis: 32px;
   }
 
   .library-search-button {
@@ -577,8 +703,11 @@
 @media (prefers-reduced-motion: reduce) {
   .back-to-categories,
   .category-card,
+  .category-check,
   .library-search-actions,
-  .library-search-status {
+  .library-search-status,
+  .category-reset {
     transition: none;
+    animation: none;
   }
 }
