@@ -59,7 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const emptyState = $("#libraryEmptyState");
   const resultsSection = $("#libraryResults");
 
-  let selectedCategory = "";
+  /*
+    "all" means the All Talks filter is selected.
+    Individual categories use their normal category name.
+  */
+  let selectedCategory = "all";
 
   $("#lastUpdated").textContent =
     `Last updated: ${data.lastUpdated}`;
@@ -94,9 +98,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderCategories() {
-    categoryGrid.innerHTML = usedCategories
+    const allSelected =
+      selectedCategory === "all";
+
+    const allTalksButton = `
+      <button
+        class="category-card ${allSelected ? "is-selected" : ""}"
+        type="button"
+        data-category="all"
+        aria-pressed="${allSelected}"
+      >
+        <span class="category-card-name">
+          ${allSelected ? "✓ " : ""}
+          All Talks
+        </span>
+
+        <span class="category-card-count">
+          <strong>${activeTalks.length}</strong>
+          ${activeTalks.length === 1 ? "talk" : "talks"}
+        </span>
+      </button>
+    `;
+
+    const categoryButtons = usedCategories
       .map(category => {
         const count = categoryCounts[category];
+
         const selected =
           selectedCategory === category;
 
@@ -121,26 +148,26 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .join("");
 
-    categoryReset.hidden = !selectedCategory;
+    categoryGrid.innerHTML =
+      allTalksButton + categoryButtons;
+
+    /*
+      The Clear Category button is only needed
+      when a specific category is selected.
+    */
+    categoryReset.hidden =
+      selectedCategory === "all";
 
     categoryGrid
       .querySelectorAll(".category-card")
       .forEach(button => {
         button.addEventListener("click", () => {
-          const category =
-            button.dataset.category;
-
           selectedCategory =
-            selectedCategory === category
-              ? ""
-              : category;
+            button.dataset.category;
 
           renderCategories();
           renderResults();
-
-          if (selectedCategory) {
-            scrollToResults();
-          }
+          scrollToResults();
         });
       });
   }
@@ -197,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return activeTalks.filter(talk => {
       const matchesCategory =
-        !selectedCategory ||
+        selectedCategory === "all" ||
         talk.category === selectedCategory;
 
       const haystack = [
@@ -234,66 +261,83 @@ document.addEventListener("DOMContentLoaded", () => {
     clearSearchButton.hidden =
       query.length === 0;
 
-    let talksToShow;
+    /*
+      ALWAYS newest to oldest.
+    */
+    const talksToShow =
+      [...filtered]
+        .sort((a, b) => b.number - a.number);
 
-    if (!query && !selectedCategory) {
-      talksToShow = [...activeTalks]
-        .sort((a, b) => b.number - a.number)
-        .slice(0, 6);
-
-      $("#resultsEyebrow").textContent =
-        "Recently Added";
-
-      $("#resultsTitle").textContent =
-        "Latest Toolbox Talks";
-
-      $("#resultsDescription").textContent =
-        "The newest talks in the Ridge Rock safety library.";
-    }
-
-    else {
-      talksToShow =
-        [...filtered]
-          .sort((a, b) => b.number - a.number);
-
+    /*
+      ALL TALKS — NO SEARCH
+    */
+    if (selectedCategory === "all" && !query) {
       $("#resultsEyebrow").textContent =
         "Toolbox Talk Archive";
 
-      if (selectedCategory && query) {
-        $("#resultsTitle").textContent =
-          selectedCategory;
+      $("#resultsTitle").textContent =
+        "All Toolbox Talks";
 
-        $("#resultsDescription").textContent =
-          `${filtered.length} ${
-            filtered.length === 1
-              ? "talk"
-              : "talks"
-          } in this category matching "${query}".`;
-      }
+      $("#resultsDescription").textContent =
+        `${talksToShow.length} ${
+          talksToShow.length === 1
+            ? "talk"
+            : "talks"
+        }, newest to oldest.`;
+    }
 
-      else if (selectedCategory) {
-        $("#resultsTitle").textContent =
-          selectedCategory;
+    /*
+      ALL TALKS — WITH SEARCH
+    */
+    else if (selectedCategory === "all" && query) {
+      $("#resultsEyebrow").textContent =
+        "Search Results";
 
-        $("#resultsDescription").textContent =
-          `${filtered.length} ${
-            filtered.length === 1
-              ? "talk"
-              : "talks"
-          } in this category.`;
-      }
+      $("#resultsTitle").textContent =
+        "Matching Toolbox Talks";
 
-      else {
-        $("#resultsTitle").textContent =
-          "Search Results";
+      $("#resultsDescription").textContent =
+        `${talksToShow.length} ${
+          talksToShow.length === 1
+            ? "talk"
+            : "talks"
+        } matching "${query}".`;
+    }
 
-        $("#resultsDescription").textContent =
-          `${filtered.length} ${
-            filtered.length === 1
-              ? "talk"
-              : "talks"
-          } matching "${query}".`;
-      }
+    /*
+      CATEGORY — WITH SEARCH
+    */
+    else if (selectedCategory !== "all" && query) {
+      $("#resultsEyebrow").textContent =
+        "Filtered Results";
+
+      $("#resultsTitle").textContent =
+        selectedCategory;
+
+      $("#resultsDescription").textContent =
+        `${talksToShow.length} ${
+          talksToShow.length === 1
+            ? "talk"
+            : "talks"
+        } in this category matching "${query}".`;
+    }
+
+    /*
+      CATEGORY — NO SEARCH
+    */
+    else {
+      $("#resultsEyebrow").textContent =
+        "Toolbox Talk Archive";
+
+      $("#resultsTitle").textContent =
+        selectedCategory;
+
+      $("#resultsDescription").textContent =
+        `${talksToShow.length} ${
+          talksToShow.length === 1
+            ? "talk"
+            : "talks"
+        } in this category.`;
     }
 
     talkGrid.innerHTML =
@@ -316,7 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   categoryReset.addEventListener("click", () => {
-    selectedCategory = "";
+    selectedCategory = "all";
     renderCategories();
     renderResults();
   });
