@@ -11,7 +11,7 @@
 */
 
 const safetyHubData = {
-  lastUpdated: "September 16, 2026",
+  lastUpdated: "October 5, 2026",
 
   quickLinks: [
     {
@@ -261,7 +261,7 @@ const safetyHubData = {
       keywords: "ppe enforcement personal protective equipment hard hat safety glasses high visibility reflective vest boots written warning foreman compliance",
       active: true
     },
-        {
+    {
       number: 15,
       title: "Safe Trench Entry",
       category: "Excavation",
@@ -277,6 +277,33 @@ const safetyHubData = {
       description: "Safely locating, exposing, and identifying underground utilities before excavation and preventing utility strikes.",
       fileName: "2026-9-15 Toolbox Talk 016 - Utility Line Safety.pdf",
       keywords: "utility line safety underground utilities excavation locate expose identify markings 3 feet hand digging vacuum excavation air knife utility strike stop digging",
+      active: true
+    },
+    {
+      number: 17,
+      title: "The Importance of Safety Glasses",
+      category: "PPE",
+      description: "Why consistent safety-glasses use matters, common eye hazards, proper eye protection, and preventing permanent eye injuries.",
+      fileName: "2026-9-22 Toolbox Talk 017 - The Importance of Safety Glasses.pdf",
+      keywords: "safety glasses eye protection eyesight ppe flying particles debris side protection eye injury",
+      active: true
+    },
+    {
+      number: 18,
+      title: "Backing & Spotter Safety",
+      category: "Vehicle Safety",
+      description: "Safe backing practices, checking the entire backing path, proper spotter use, blind spots, and avoiding reliance on cameras alone.",
+      fileName: "2026-9-28 Toolbox Talk 018 - Backing & Spotter Safety.pdf",
+      keywords: "backing spotter vehicle equipment blind spots get out and look camera mirrors backup alarm overhead hazards",
+      active: true
+    },
+    {
+      number: 19,
+      title: "Cold Weather Safety & Staying Warm",
+      category: "Heat & Weather",
+      description: "Preparing for cold weather, dressing in layers, staying dry, recognizing cold-stress warning signs, and warming up when needed.",
+      fileName: "2026-10-5 Toolbox Talk 019 - Staying Warm.pdf",
+      keywords: "cold weather staying warm winter layers wet clothing cold stress shivering frost ice snow gloves",
       active: true
     }
   ]
