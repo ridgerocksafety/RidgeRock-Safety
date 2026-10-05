@@ -1,12 +1,12 @@
 "use strict";
 
 const sdsLibraryData = {
-  lastUpdated: "August 17, 2026",
+  lastUpdated: "October 5, 2026",
 
   completePackage: {
     title: "Complete Ridge Rock SDS Package",
     description: "View the complete Ridge Rock SDS collection and chemical inventory in one document.",
-    fileName: "SafetyDataSheet_RidgeRock.pdf"
+    fileName: "SafetyDataSheet_RidgeRock_v2.pdf"
   },
 
   categories: [
@@ -178,6 +178,46 @@ const sdsLibraryData = {
       category: "Solvents & Adhesives",
       fileName: "20_PL_Premium_Max_Construction_Adhesive_Loctite.pdf",
       keywords: "pl premium max construction adhesive loctite henkel glue"
+    },
+    {
+      number: 21,
+      title: "De-Icer Windshield Washer Fluid",
+      manufacturer: "Prestone Products Corporation",
+      category: "Equipment & Maintenance",
+      fileName: "21_Prestone_DeIcer_Windshield_Washer_Fluid.pdf",
+      keywords: "prestone deicer de-icer windshield washer fluid washer fluid windshield cleaner vehicle winter"
+    },
+    {
+      number: 22,
+      title: "Jump Start Starting Fluid",
+      manufacturer: "CRC Industries",
+      category: "Equipment & Maintenance",
+      fileName: "22_CRC_Jump_Start_Starting_Fluid.pdf",
+      keywords: "crc jump start starting fluid engine starting aerosol diesel gasoline equipment maintenance"
+    },
+    {
+      number: 23,
+      title: "QD Electronic Cleaner",
+      manufacturer: "CRC Industries",
+      category: "Equipment & Maintenance",
+      fileName: "23_CRC_QD_Electronic_Cleaner.pdf",
+      keywords: "crc qd electronic cleaner electrical cleaner contact cleaner electronics aerosol maintenance"
+    },
+    {
+      number: 24,
+      title: "133K Anti-Seize Lubricant",
+      manufacturer: "ITW Permatex, Inc.",
+      category: "Equipment & Maintenance",
+      fileName: "24_Permatex_Anti_Seize_Lubricant.pdf",
+      keywords: "permatex 133k anti seize anti-seize lubricant bolts threads fasteners maintenance"
+    },
+    {
+      number: 25,
+      title: "Medium Strength Threadlocker Blue",
+      manufacturer: "ITW Permatex, Inc.",
+      category: "Solvents & Adhesives",
+      fileName: "25_Permatex_Medium_Strength_Threadlocker_Blue.pdf",
+      keywords: "permatex medium strength threadlocker thread locker blue adhesive bolts threads fasteners"
     }
   ]
 };
