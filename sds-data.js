@@ -184,7 +184,7 @@ const sdsLibraryData = {
       title: "De-Icer Windshield Washer Fluid",
       manufacturer: "Prestone Products Corporation",
       category: "Equipment & Maintenance",
-      fileName: "21_Prestone_DeIcer_Windshield_Washer_Fluid.pdf",
+      fileName: "SDS546-DeIcer-Washer-Fluid(1).pdf",
       keywords: "prestone deicer de-icer windshield washer fluid washer fluid windshield cleaner vehicle winter"
     },
     {
@@ -192,7 +192,7 @@ const sdsLibraryData = {
       title: "Jump Start Starting Fluid",
       manufacturer: "CRC Industries",
       category: "Equipment & Maintenance",
-      fileName: "22_CRC_Jump_Start_Starting_Fluid.pdf",
+      fileName: "sds-1003843(1).pdf",
       keywords: "crc jump start starting fluid engine starting aerosol diesel gasoline equipment maintenance"
     },
     {
@@ -200,7 +200,7 @@ const sdsLibraryData = {
       title: "QD Electronic Cleaner",
       manufacturer: "CRC Industries",
       category: "Equipment & Maintenance",
-      fileName: "23_CRC_QD_Electronic_Cleaner.pdf",
+      fileName: "sds-1003719(1).pdf",
       keywords: "crc qd electronic cleaner electrical cleaner contact cleaner electronics aerosol maintenance"
     },
     {
@@ -208,7 +208,7 @@ const sdsLibraryData = {
       title: "133K Anti-Seize Lubricant",
       manufacturer: "ITW Permatex, Inc.",
       category: "Equipment & Maintenance",
-      fileName: "24_Permatex_Anti_Seize_Lubricant.pdf",
+      fileName: "80078(1).pdf",
       keywords: "permatex 133k anti seize anti-seize lubricant bolts threads fasteners maintenance"
     },
     {
@@ -216,7 +216,7 @@ const sdsLibraryData = {
       title: "Medium Strength Threadlocker Blue",
       manufacturer: "ITW Permatex, Inc.",
       category: "Solvents & Adhesives",
-      fileName: "25_Permatex_Medium_Strength_Threadlocker_Blue.pdf",
+      fileName: "24200(1).pdf",
       keywords: "permatex medium strength threadlocker thread locker blue adhesive bolts threads fasteners"
     }
   ]
