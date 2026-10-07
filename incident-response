@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ridge Rock incident response guidance for injuries, utility strikes, vehicle accidents, property damage, equipment damage, and environmental incidents.">
+  <title>Incident Response | Ridge Rock Safety Hub</title>
+  <link rel="apple-touch-icon" href="assets/safety-hub-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Safety Hub">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+  <script src="incident-response.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="shell header-inner">
+<a class="brand" href="index.html" aria-label="Ridge Rock Safety Hub home"><img src="assets/ridge-rock-logo.png" alt="Ridge Rock LLC logo"></a>
+<button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav">Menu</button>
+<nav class="main-nav" id="mainNav" aria-label="Primary navigation">
+<a href="index.html#reporting">Reporting</a><a href="index.html#toolbox">Current Talk</a><a href="toolbox-talks.html">Talk Library</a><a href="sds.html">SDS Library</a><a href="index.html#resources">Resources</a><a href="index.html#contacts">Contacts</a>
+</nav></div></header>
+<main id="top">
+<section class="incident-hero"><div class="shell incident-hero-inner">
+<a class="incident-back-link" href="index.html#reporting">← Back to Safety Hub</a>
+<p class="eyebrow">Incident Response</p><h1>What to Do After an Incident</h1>
+<p>Use this page for quick response guidance. Take care of the immediate situation and make the required calls before worrying about documentation.</p>
+</div></section>
+<section class="section incident-immediate-section"><div class="shell"><div class="incident-alert">
+<div class="incident-alert-heading"><div class="incident-alert-icon" aria-hidden="true">!</div><div><p class="incident-alert-kicker">Incident Happening Now?</p><h2>Take care of the immediate situation first.</h2><p>Do not delay emergency response, medical attention, or required notifications to use this page or complete documentation.</p></div></div>
+<div class="immediate-steps">
+<div class="immediate-step"><span>1</span><div><h3>Stop Work &amp; Make the Area Safe</h3><p>Stop affected work and address immediate hazards only when it can be done safely. Keep others away from the hazard.</p></div></div>
+<div class="immediate-step"><span>2</span><div><h3>Get Emergency Help if Needed</h3><p>For a serious or life-threatening emergency, fire, or other immediate danger, call 911.</p></div></div>
+<div class="immediate-step"><span>3</span><div><h3>Notify Your Foreman / Supervisor</h3><p>Notify your Foreman or Supervisor immediately so the proper response can be coordinated.</p></div></div>
+<div class="immediate-step"><span>4</span><div><h3>Notify Superintendent &amp; Safety</h3><p>Contact your Superintendent and the Safety Department as soon as the immediate situation is being handled.</p></div></div>
+</div>
+<div class="incident-call-actions">
+<a class="incident-call-button emergency-call" href="tel:911"><span class="call-label">Emergency</span><strong>Call 911</strong></a>
+<a class="incident-call-button safety-call" href="tel:18017872646"><span class="call-label">Safety Officer</span><strong>Call Richard Payne</strong><span>801-787-2646</span></a>
+</div></div></div></section>
+<section class="section section-alt"><div class="shell">
+<div class="section-heading"><div><p class="eyebrow">Additional Guidance</p><h2>What happened?</h2><p>Once the immediate situation is being handled, select the incident type below for additional guidance.</p></div></div>
+<div class="incident-type-list">
+<article class="incident-type-card">
+<button class="incident-type-button" type="button" aria-expanded="false" aria-controls="injuryInstructions">
+<span class="incident-type-icon incident-icon-red">+</span><span class="incident-type-copy"><strong>Injury / Medical</strong><small>Employee injury, illness, or medical emergency</small></span><span class="incident-chevron" aria-hidden="true">+</span></button>
+<div class="incident-instructions" id="injuryInstructions" hidden>
+<div class="instruction-group instruction-immediate"><span class="instruction-label">Immediate</span><h3>Protect the injured person and get appropriate help.</h3><ul><li>Stop affected work and make sure the area is safe before approaching or assisting.</li><li>Call 911 for a serious or life-threatening injury, or whenever emergency medical assistance is needed.</li><li>Do not move a seriously injured person unless remaining where they are creates a greater immediate danger.</li><li>Provide first aid only within your level of training and available resources.</li><li>Notify the Foreman / Supervisor, Superintendent, and Safety Department.</li></ul></div>
+<div class="instruction-group"><span class="instruction-label">When Safe</span><ul><li>Preserve the area when practical so the incident can be properly reviewed.</li><li>Take photos of the area, equipment, conditions, or other relevant details when it is safe to do so.</li><li>Follow direction from supervision and Safety regarding additional documentation and next steps.</li></ul></div>
+</div></article>
+<article class="incident-type-card">
+<button class="incident-type-button" type="button" aria-expanded="false" aria-controls="utilityInstructions">
+<span class="incident-type-icon incident-icon-amber">!</span><span class="incident-type-copy"><strong>Utility Strike</strong><small>Electrical, gas, communication, water, or other utility</small></span><span class="incident-chevron" aria-hidden="true">+</span></button>
+<div class="incident-instructions" id="utilityInstructions" hidden>
+<div class="instruction-group instruction-immediate"><span class="instruction-label">Immediate</span><h3>Stop work and keep everyone away from the affected area.</h3><ul><li>Stop excavation or other affected work immediately.</li><li>Keep employees and bystanders away from the damaged utility and surrounding hazard area.</li><li>Treat damaged electrical lines and anything in contact with them as energized. Do not touch them.</li><li>If equipment may be in contact with an energized line, stay away from the equipment and do not approach it.</li><li>If there is a gas release, fire, electrical hazard, injury, or other immediate danger, call 911.</li><li>Notify the Foreman / Supervisor, Superintendent, and Safety Department immediately.</li></ul></div>
+<div class="instruction-group"><span class="instruction-label">When Safe</span><ul><li>Do not attempt to repair, cover, reconnect, or disturb a damaged utility unless specifically authorized and qualified to do so.</li><li>Take photos of markings, the damaged utility, equipment position, and surrounding conditions only when it is safe.</li><li>Do not resume affected work until the hazard has been evaluated and you have been directed that work may continue.</li></ul></div>
+</div></article>
+<article class="incident-type-card">
+<button class="incident-type-button" type="button" aria-expanded="false" aria-controls="vehicleInstructions">
+<span class="incident-type-icon incident-icon-blue">V</span><span class="incident-type-copy"><strong>Vehicle Accident</strong><small>Company vehicle, traffic, or roadway accident</small></span><span class="incident-chevron" aria-hidden="true">+</span></button>
+<div class="incident-instructions" id="vehicleInstructions" hidden>
+<div class="instruction-group instruction-immediate"><span class="instruction-label">Immediate</span><h3>Check for injuries and protect people from additional danger.</h3><ul><li>Stop and check yourself and others for injuries.</li><li>Call 911 when emergency medical assistance, law enforcement, or other emergency response is needed.</li><li>Stay out of active traffic and do not put yourself in danger while checking vehicles or damage.</li><li>Notify the Foreman / Supervisor, Superintendent, and Safety Department.</li></ul></div>
+<div class="instruction-group"><span class="instruction-label">When Safe</span><ul><li>Take photos of all involved vehicles, visible damage, the surrounding area, roadway, and relevant conditions.</li><li>Gather the information needed from other involved drivers or parties when appropriate.</li><li>Do not argue about fault or make unnecessary statements about who caused the accident.</li><li>Follow direction from supervision and Safety regarding towing, vehicle use, documentation, and additional reporting.</li></ul></div>
+</div></article>
+<article class="incident-type-card">
+<button class="incident-type-button" type="button" aria-expanded="false" aria-controls="damageInstructions">
+<span class="incident-type-icon incident-icon-slate">E</span><span class="incident-type-copy"><strong>Property / Equipment Damage</strong><small>Damaged equipment, structures, property, or materials</small></span><span class="incident-chevron" aria-hidden="true">+</span></button>
+<div class="incident-instructions" id="damageInstructions" hidden>
+<div class="instruction-group instruction-immediate"><span class="instruction-label">Immediate</span><h3>Stop work if continued operation could create another hazard.</h3><ul><li>Check for injuries and any immediate hazards created by the damage.</li><li>Shut down or isolate damaged equipment when it can be done safely.</li><li>Keep employees away from unstable, damaged, or potentially hazardous equipment or property.</li><li>Notify the Foreman / Supervisor, Superintendent, and Safety Department.</li></ul></div>
+<div class="instruction-group"><span class="instruction-label">When Safe</span><ul><li>Take photos of the damage, equipment, surrounding area, and relevant conditions.</li><li>Do not operate damaged equipment until it has been evaluated and cleared for use.</li><li>Preserve damaged components or other relevant evidence when practical.</li><li>Follow direction from supervision and Safety regarding repairs, documentation, and next steps.</li></ul></div>
+</div></article>
+<article class="incident-type-card">
+<button class="incident-type-button" type="button" aria-expanded="false" aria-controls="environmentalInstructions">
+<span class="incident-type-icon incident-icon-green">E</span><span class="incident-type-copy"><strong>Environmental Incident</strong><small>Spill, leak, release, or other environmental event</small></span><span class="incident-chevron" aria-hidden="true">+</span></button>
+<div class="incident-instructions" id="environmentalInstructions" hidden>
+<div class="instruction-group instruction-immediate"><span class="instruction-label">Immediate</span><h3>Protect people first and prevent the situation from getting worse.</h3><ul><li>Stop work and identify the immediate hazard without exposing yourself to the material.</li><li>Keep employees and bystanders away when the material or level of danger is unknown.</li><li>Stop the source or contain the release only when it can be done safely and you have the appropriate equipment and training.</li><li>Protect drains, waterways, and surrounding areas when it can be done safely.</li><li>Call 911 for fire, serious exposure, immediate danger, or another emergency condition.</li><li>Notify the Foreman / Supervisor, Superintendent, and Safety Department.</li></ul></div>
+<div class="instruction-group"><span class="instruction-label">When Safe</span><ul><li>Identify the material involved if known and consult the Safety Data Sheet when appropriate.</li><li>Take photos of the affected area, source, material, and surrounding conditions.</li><li>Do not dispose of contaminated material or resume affected work until directed by supervision or Safety.</li></ul><a class="button button-outline" href="sds.html">Open SDS Library →</a></div>
+</div></article>
+</div></div></section>
+<section class="section"><div class="shell"><div class="incident-reminder"><div class="shield-outline">✓</div><div><p class="eyebrow">Remember</p><h2>Safety and communication come first.</h2><p>Take care of immediate hazards and injuries first. Notify supervision and Safety promptly. Documentation and photos can be handled once the situation is under control and it is safe to do so.</p></div></div></div></section>
+</main>
+<footer class="site-footer"><div class="shell footer-inner"><div><img src="assets/ridge-rock-logo.png" alt="" aria-hidden="true"><p>Work Safe. Go Home Safe.</p></div><p>Ridge Rock Safety Department</p></div></footer>
+</body></html>
