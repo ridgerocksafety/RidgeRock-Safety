@@ -47,14 +47,13 @@ const safetyHubData = {
       active: true
     },
     {
-      title: "Report an Incident",
-      description: "Use this area for injuries, property damage, vehicle incidents, or other reportable events.",
-      url: "#",
-      buttonText: "Form Coming Soon",
+      title: "Incident Response",
+      description: "Quick response guidance for injuries, utility strikes, vehicle accidents, property or equipment damage, and environmental incidents.",
+      url: "incident-response.html",
+      buttonText: "What To Do",
       icon: "+",
       theme: "red",
-      active: true,
-      disabled: true
+      active: true
     },
     {
       title: "Report a Safety Concern",
