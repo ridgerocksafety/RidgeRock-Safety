@@ -48,12 +48,13 @@ const safetyHubData = {
     },
     {
       title: "Incident Response",
-      description: "Quick response guidance for injuries, utility strikes, vehicle accidents, property or equipment damage, and environmental incidents.",
-      url: "incident-response.html",
-      buttonText: "What To Do",
-      icon: "+",
-      theme: "red",
-      active: true
+       title: "Incident Guide",
+  description: "Immediate response guidance to help you take the right steps, make the right calls, and keep the situation under control.",
+  url: "incident-response.html",
+  buttonText: "View Guide",
+  icon: "+",
+  theme: "red",
+  active: true
     },
     {
       title: "Report a Safety Concern",
