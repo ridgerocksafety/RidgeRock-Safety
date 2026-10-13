@@ -1,3 +1,4 @@
+
 /*
   RIDGE ROCK SAFETY HUB DATA
   --------------------------
@@ -11,7 +12,7 @@
 */
 
 const safetyHubData = {
-  lastUpdated: "October 5, 2026",
+  lastUpdated: "October 12, 2026",
 
   quickLinks: [
     {
@@ -48,13 +49,13 @@ const safetyHubData = {
     },
     {
       title: "Incident Response",
-       title: "Incident Guide",
-  description: "Immediate response guidance to help you take the right steps, make the right calls, and keep the situation under control.",
-  url: "incident-response.html",
-  buttonText: "View Guide",
-  icon: "+",
-  theme: "red",
-  active: true
+      title: "Incident Guide",
+      description: "Immediate response guidance to help you take the right steps, make the right calls, and keep the situation under control.",
+      url: "incident-response.html",
+      buttonText: "View Guide",
+      icon: "+",
+      theme: "red",
+      active: true
     },
     {
       title: "Report a Safety Concern",
@@ -304,6 +305,15 @@ const safetyHubData = {
       description: "Preparing for cold weather, dressing in layers, staying dry, recognizing cold-stress warning signs, and warming up when needed.",
       fileName: "2026-10-5 Toolbox Talk 019 - Staying Warm.pdf",
       keywords: "cold weather staying warm winter layers wet clothing cold stress shivering frost ice snow gloves",
+      active: true
+    },
+    {
+      number: 20,
+      title: "Working in Low-Light Conditions",
+      category: "Heat & Weather",
+      description: "Staying visible as daylight hours shorten, using proper lighting and reflective vests, and preventing incidents around equipment and traffic.",
+      fileName: "2026-10-12 Toolbox Talk 020 - Low-Light Conditions.pdf",
+      keywords: "low light reduced visibility shorter days winter reflective safety vest lighting blind spots equipment traffic work zone",
       active: true
     }
   ]
