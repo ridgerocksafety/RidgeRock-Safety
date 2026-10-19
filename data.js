@@ -12,7 +12,7 @@
 */
 
 const safetyHubData = {
-  lastUpdated: "October 12, 2026",
+  lastUpdated: "October 19, 2026",
 
   quickLinks: [
     {
@@ -314,6 +314,15 @@ const safetyHubData = {
       description: "Staying visible as daylight hours shorten, using proper lighting and reflective vests, and preventing incidents around equipment and traffic.",
       fileName: "2026-10-12 Toolbox Talk 020 - Low-Light Conditions.pdf",
       keywords: "low light reduced visibility shorter days winter reflective safety vest lighting blind spots equipment traffic work zone",
+      active: true
+    },
+    {
+      number: 21,
+      title: "Jobsite Housekeeping",
+      category: "Housekeeping",
+      description: "Keeping jobsites clean and organized, maintaining clear walkways and access routes, safely storing materials, and properly disposing of trash and debris.",
+      fileName: "Toolbox Talk 021 - Jobsite Housekeeping.pdf",
+      keywords: "jobsite housekeeping clean organized debris trash waste disposal walkways access routes material storage slips trips falls fire prevention",
       active: true
     }
   ]
