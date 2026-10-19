@@ -1674,3 +1674,15 @@ input {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================
+   SAFETY FEEDBACK
+   ========================================== */
+
+.feedback-note {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
