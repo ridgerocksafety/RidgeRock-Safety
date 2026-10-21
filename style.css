@@ -1696,83 +1696,99 @@ input {
   display: none !important;
 }
 
-/* ANNOUNCEMENT GRID */
+/* ANNOUNCEMENT GRID — COMPACT HOMEPAGE DESIGN */
+
+.announcements-section {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.announcements-section .section-heading {
+  margin-bottom: 16px;
+}
+
+.announcements-section .section-heading h2 {
+  font-size: clamp(23px, 3vw, 29px);
+}
+
+.announcements-section .section-heading p:last-child {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 5px;
+}
 
 .announcements-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .announcement-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
+  gap: 9px;
   min-width: 0;
-  padding: 28px;
-  background: #ffffff;
+  padding: 16px 18px;
+  background: #fff;
   border: 1px solid #dce3eb;
-  border-radius: 16px;
-  box-shadow: 0 5px 20px rgba(12, 35, 58, 0.045);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(7, 24, 43, .045);
 }
 
 .announcement-featured {
-  grid-column: 1 / -1;
-  background: linear-gradient(
-    115deg,
-    #ffffff 0%,
-    #f2f6fb 100%
-  );
-  border-left: 5px solid #d6a52c;
+  background: #fffdf7;
+  border-left: 4px solid var(--gold-500);
 }
 
 .announcement-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  width: 100%;
   flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
 }
 
 .announcement-category {
   color: #315d83;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.07em;
+  letter-spacing: .06em;
   text-transform: uppercase;
 }
 
 .announcement-featured-label {
-  padding: 5px 11px;
+  padding: 3px 8px;
   background: #fff4d8;
   color: #806016;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 .announcement-card h3 {
   margin: 0;
   color: #163451;
-  font-size: clamp(19px, 2vw, 24px);
-  line-height: 1.25;
-  letter-spacing: -0.02em;
+  font-size: 15px;
+  line-height: 1.35;
 }
 
 .announcement-card p {
   margin: 0;
   color: #586879;
-  font-size: 14px;
-  line-height: 1.65;
+  font-size: 12.5px;
+  line-height: 1.55;
   flex: 1;
 }
 
 .announcement-card .button {
-  margin-top: 6px;
+  align-self: flex-start;
+  min-height: 34px;
+  margin-top: 5px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
   text-decoration: none;
 }
 
@@ -1929,11 +1945,8 @@ input {
 @media (max-width: 900px) {
 
   .announcements-grid {
-    gap: 16px;
-  }
-
-  .announcement-card {
-    padding: 23px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
   .announcement-popup.popup-corner {
@@ -1949,22 +1962,22 @@ input {
 
 @media (max-width: 650px) {
 
-  .announcements-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
+  .announcements-section {
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 
-  .announcement-featured {
-    grid-column: auto;
+  .announcements-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .announcement-card {
-    padding: 21px;
-    border-radius: 13px;
+    padding: 14px 15px;
   }
 
   .announcement-card h3 {
-    font-size: 20px;
+    font-size: 14px;
   }
 
   .announcement-popup.popup-corner {
@@ -1998,7 +2011,7 @@ input {
 @media (max-width: 390px) {
 
   .announcement-card {
-    padding: 18px;
+    padding: 13px 14px;
   }
 
   .announcement-popup-actions {
