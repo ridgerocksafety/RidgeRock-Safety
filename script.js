@@ -1,3 +1,4 @@
+
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -111,20 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     else if (isInternalLink(item.url)) {
-      /*
-        Internal Safety Hub page:
-        stay in the same tab.
-      */
       attributes = "";
       arrow =
         '<span aria-hidden="true">→</span>';
     }
 
     else {
-      /*
-        External destination:
-        open in a new tab.
-      */
       attributes =
         'target="_blank" rel="noopener noreferrer"';
 
@@ -336,4 +329,444 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
     });
+
+
+  /*
+    ==========================================
+    SAFETY ANNOUNCEMENTS
+    ==========================================
+
+    Announcements are managed in data.js.
+
+    Only active announcements within their
+    start and end dates are displayed.
+  */
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const parseLocalDate = value => {
+    if (!value) return null;
+
+    const [year, month, day] =
+      value.split("-").map(Number);
+
+    return new Date(year, month - 1, day);
+  };
+
+  const isAnnouncementActive = item => {
+    if (item.active === false) return false;
+
+    const start = parseLocalDate(item.startDate);
+    const end = parseLocalDate(item.endDate);
+
+    if (start && today < start) return false;
+    if (end && today > end) return false;
+
+    return true;
+  };
+
+  const activeAnnouncements =
+    (data.announcements || [])
+      .filter(isAnnouncementActive)
+      .sort((a, b) =>
+        Number(Boolean(b.featured)) -
+        Number(Boolean(a.featured))
+      );
+
+
+  /*
+    ANNOUNCEMENT LINKS
+  */
+
+  const announcementLink = item => {
+    if (!item.url || item.url === "#") {
+      return "";
+    }
+
+    const external =
+      !isInternalLink(item.url);
+
+    return `
+      <a
+        class="button button-primary"
+        href="${escapeHTML(item.url)}"
+        ${
+          external
+            ? 'target="_blank" rel="noopener noreferrer"'
+            : ""
+        }
+      >
+        ${escapeHTML(item.buttonText || "Learn More")}
+
+        <span aria-hidden="true">
+          ${external ? "↗" : "→"}
+        </span>
+      </a>
+    `;
+  };
+
+
+  /*
+    RENDER HOMEPAGE ANNOUNCEMENTS
+  */
+
+  const announcementsGrid =
+    $("#announcementsGrid");
+
+  const announcementsSection =
+    $("#announcements");
+
+  if (announcementsGrid) {
+
+    if (activeAnnouncements.length === 0) {
+      if (announcementsSection) {
+        announcementsSection.hidden = true;
+      }
+    }
+
+    else {
+      announcementsGrid.innerHTML =
+        activeAnnouncements
+          .map(item => `
+
+            <article
+              class="announcement-card ${
+                item.featured
+                  ? "announcement-featured"
+                  : ""
+              }"
+            >
+
+              <div class="announcement-card-top">
+
+                <span class="announcement-category">
+                  ${escapeHTML(item.category || "Announcement")}
+                </span>
+
+                ${
+                  item.featured
+                    ? `
+                      <span class="announcement-featured-label">
+                        Featured
+                      </span>
+                    `
+                    : ""
+                }
+
+              </div>
+
+              <h3>
+                ${escapeHTML(item.title)}
+              </h3>
+
+              <p>
+                ${escapeHTML(item.description)}
+              </p>
+
+              ${announcementLink(item)}
+
+            </article>
+
+          `)
+          .join("");
+    }
+  }
+
+
+  /*
+    ==========================================
+    ANNOUNCEMENT POPUP SYSTEM
+    ==========================================
+
+    popup: true
+      Enables the notification.
+
+    popupType: "corner"
+      Small notification at the side.
+
+    popupType: "modal"
+      Large centered announcement.
+
+    popupVersion:
+      Increase the version to show an
+      updated popup again after dismissal.
+  */
+
+  const popup =
+    $("#announcementPopup");
+
+  const popupPanel =
+    $("#announcementPopupPanel");
+
+  const popupBackdrop =
+    $("#announcementPopupBackdrop");
+
+  const popupTitle =
+    $("#announcementPopupTitle");
+
+  const popupDescription =
+    $("#announcementPopupDescription");
+
+  const popupLink =
+    $("#announcementPopupLink");
+
+  const popupClose =
+    $("#announcementPopupClose");
+
+  const popupDismiss =
+    $("#announcementPopupDismiss");
+
+
+  const getPopupStorageKey = item =>
+    `ridgeRockPopup:${item.id}:v${item.popupVersion || 1}`;
+
+
+  const wasPopupDismissed = item => {
+    try {
+      return (
+        localStorage.getItem(
+          getPopupStorageKey(item)
+        ) === "dismissed"
+      );
+    } catch {
+      return false;
+    }
+  };
+
+
+  const rememberPopupDismissal = item => {
+    try {
+      localStorage.setItem(
+        getPopupStorageKey(item),
+        "dismissed"
+      );
+    } catch {
+      // Popup still closes if browser storage is disabled.
+    }
+  };
+
+
+  const popupAnnouncements =
+    activeAnnouncements.filter(item =>
+      item.popup === true &&
+      !wasPopupDismissed(item)
+    );
+
+
+  if (
+    popup &&
+    popupPanel &&
+    popupTitle &&
+    popupDescription &&
+    popupLink &&
+    popupClose &&
+    popupDismiss &&
+    popupAnnouncements.length > 0
+  ) {
+
+    /*
+      Show only one popup per visit.
+      Centered announcements have priority.
+    */
+
+    popupAnnouncements.sort((a, b) => {
+      const aPriority =
+        a.popupType === "modal" ? 1 : 0;
+
+      const bPriority =
+        b.popupType === "modal" ? 1 : 0;
+
+      return bPriority - aPriority;
+    });
+
+    const announcement =
+      popupAnnouncements[0];
+
+    const isModal =
+      announcement.popupType === "modal";
+
+    popupTitle.textContent =
+      announcement.title;
+
+    popupDescription.textContent =
+      announcement.description;
+
+    if (
+      announcement.url &&
+      announcement.url !== "#"
+    ) {
+      popupLink.href =
+        announcement.url;
+
+      popupLink.textContent =
+        announcement.buttonText || "Learn More";
+
+      if (isInternalLink(announcement.url)) {
+        popupLink.removeAttribute("target");
+        popupLink.removeAttribute("rel");
+      } else {
+        popupLink.target = "_blank";
+        popupLink.rel = "noopener noreferrer";
+      }
+
+      popupLink.hidden = false;
+    }
+
+    else {
+      popupLink.hidden = true;
+    }
+
+
+    /*
+      APPLY POPUP STYLE
+    */
+
+    popup.classList.remove(
+      "popup-corner",
+      "popup-modal"
+    );
+
+    popup.classList.add(
+      isModal
+        ? "popup-modal"
+        : "popup-corner"
+    );
+
+    popupPanel.setAttribute(
+      "aria-modal",
+      String(isModal)
+    );
+
+    if (popupBackdrop) {
+      popupBackdrop.hidden = !isModal;
+    }
+
+
+    /*
+      CLOSE POPUP
+    */
+
+    const previousFocus =
+      document.activeElement;
+
+    const closePopup = () => {
+      popup.hidden = true;
+
+      document.body.classList.remove(
+        "announcement-modal-open"
+      );
+
+      rememberPopupDismissal(
+        announcement
+      );
+
+      document.removeEventListener(
+        "keydown",
+        handlePopupKeys
+      );
+
+      if (
+        isModal &&
+        previousFocus &&
+        typeof previousFocus.focus === "function"
+      ) {
+        previousFocus.focus();
+      }
+    };
+
+
+    /*
+      KEYBOARD ACCESSIBILITY
+    */
+
+    const handlePopupKeys = event => {
+      if (event.key === "Escape") {
+        closePopup();
+        return;
+      }
+
+      if (
+        event.key !== "Tab" ||
+        !isModal
+      ) {
+        return;
+      }
+
+      const focusable =
+        Array.from(
+          popupPanel.querySelectorAll(
+            'button:not([disabled]), a[href]:not([hidden])'
+          )
+        ).filter(element =>
+          !element.hidden
+        );
+
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last =
+        focusable[focusable.length - 1];
+
+      if (
+        event.shiftKey &&
+        document.activeElement === first
+      ) {
+        event.preventDefault();
+        last.focus();
+      }
+
+      else if (
+        !event.shiftKey &&
+        document.activeElement === last
+      ) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+
+    popupClose.addEventListener(
+      "click",
+      closePopup
+    );
+
+    popupDismiss.addEventListener(
+      "click",
+      closePopup
+    );
+
+    popupLink.addEventListener(
+      "click",
+      closePopup
+    );
+
+    if (popupBackdrop) {
+      popupBackdrop.addEventListener(
+        "click",
+        closePopup
+      );
+    }
+
+    document.addEventListener(
+      "keydown",
+      handlePopupKeys
+    );
+
+
+    /*
+      DISPLAY POPUP
+    */
+
+    popup.hidden = false;
+
+    if (isModal) {
+      document.body.classList.add(
+        "announcement-modal-open"
+      );
+
+      popupClose.focus();
+    }
+  }
+
 });
