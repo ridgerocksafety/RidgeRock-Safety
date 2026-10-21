@@ -12,7 +12,7 @@
 
   <meta
     name="description"
-    content="Ridge Rock employee safety hub for reporting, toolbox talks, Safety Data Sheets, policies, plans, feedback, and safety contacts."
+    content="Ridge Rock employee safety hub for reporting, toolbox talks, Safety Data Sheets, policies, plans, announcements, feedback, and safety contacts."
   >
 
   <title>Ridge Rock Safety Hub</title>
@@ -88,6 +88,10 @@
         aria-label="Primary navigation"
       >
 
+        <a href="#announcements">
+          Announcements
+        </a>
+
         <a href="#reporting">
           Reporting
         </a>
@@ -142,7 +146,8 @@
 
           <p class="hero-lead">
             One place for safety reporting, weekly toolbox talks,
-            company resources, employee feedback, and safety contacts.
+            announcements, company resources, employee feedback,
+            and safety contacts.
           </p>
 
           <div class="hero-actions">
@@ -207,6 +212,46 @@
         class="shell quick-grid"
         id="quickLinks"
       ></div>
+
+    </section>
+
+
+    <!-- SAFETY ANNOUNCEMENTS -->
+    <section
+      class="section announcements-section"
+      id="announcements"
+      aria-labelledby="announcementsHeading"
+    >
+
+      <div class="shell">
+
+        <div class="section-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              Safety Communications
+            </p>
+
+            <h2 id="announcementsHeading">
+              Announcements &amp; Updates
+            </h2>
+
+            <p>
+              Stay informed about current safety updates,
+              reminders, and company initiatives.
+            </p>
+
+          </div>
+
+        </div>
+
+        <div
+          class="announcements-grid"
+          id="announcementsGrid"
+        ></div>
+
+      </div>
 
     </section>
 
@@ -494,6 +539,72 @@
     </section>
 
   </main>
+
+
+  <!-- ANNOUNCEMENT NOTIFICATION / POPUP -->
+  <div
+    class="announcement-popup"
+    id="announcementPopup"
+    hidden
+  >
+
+    <div
+      class="announcement-popup-backdrop"
+      id="announcementPopupBackdrop"
+      hidden
+    ></div>
+
+    <div
+      class="announcement-popup-panel"
+      id="announcementPopupPanel"
+      role="dialog"
+      aria-labelledby="announcementPopupTitle"
+      aria-describedby="announcementPopupDescription"
+      aria-modal="false"
+      tabindex="-1"
+    >
+
+      <button
+        class="announcement-popup-close"
+        id="announcementPopupClose"
+        type="button"
+        aria-label="Dismiss announcement"
+      >
+        &times;
+      </button>
+
+      <p class="eyebrow">
+        Safety Announcement
+      </p>
+
+      <h2 id="announcementPopupTitle"></h2>
+
+      <p id="announcementPopupDescription"></p>
+
+      <div class="announcement-popup-actions">
+
+        <a
+          class="button button-primary"
+          id="announcementPopupLink"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View Announcement
+        </a>
+
+        <button
+          class="announcement-popup-dismiss"
+          id="announcementPopupDismiss"
+          type="button"
+        >
+          Not Now
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 
 
   <!-- FOOTER -->
