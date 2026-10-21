@@ -2107,3 +2107,194 @@ input {
 @media (prefers-reduced-motion: reduce) {
   .main-nav, .nav-chevron, .nav-dropdown-menu { transition: none !important; animation: none !important; }
 }
+
+
+/* ==========================================
+   RIDGE ROCK MOBILE CATEGORY SELECTOR
+   Toolbox Talk Library + SDS Library
+   Desktop design remains unchanged
+========================================== */
+
+.mobile-category-toggle {
+  display: none;
+}
+
+@media (max-width: 760px) {
+
+  /* Category section */
+  .mobile-categories-ready .category-section,
+  .mobile-categories-ready .sds-category-section {
+    background: #ffffff;
+    border: 1px solid #e1e8f0;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(7, 24, 43, 0.04);
+  }
+
+  /* Hide the large category heading on mobile */
+  .mobile-categories-ready .category-header,
+  .mobile-categories-ready .sds-category-header {
+    display: none;
+  }
+
+  /* Compact category dropdown button */
+  .mobile-category-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 54px;
+    padding: 12px 15px;
+    border: 1px solid #d6e0eb;
+    border-radius: 11px;
+    background: #f5f8fc;
+    color: #0b2543;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .mobile-category-toggle:hover {
+    background: #edf3fa;
+    border-color: #b9cbdc;
+  }
+
+  .mobile-category-toggle:focus-visible {
+    outline: 3px solid #f3bf24;
+    outline-offset: 3px;
+  }
+
+  .mobile-category-toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .mobile-category-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: #e3ecf6;
+    color: #0b2543;
+  }
+
+  .mobile-category-icon svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .mobile-category-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .mobile-category-caption {
+    color: #60748b;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .mobile-category-selected {
+    color: #0b2543;
+    font-size: 14px;
+    font-weight: 750;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-category-chevron {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .mobile-category-toggle[aria-expanded="true"]
+  .mobile-category-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Categories stay hidden until opened */
+  .mobile-categories-ready .category-grid,
+  .mobile-categories-ready .sds-category-grid {
+    display: grid;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition:
+      max-height 0.3s ease,
+      opacity 0.2s ease,
+      margin-top 0.3s ease,
+      visibility 0.3s ease;
+  }
+
+  /* Expanded category panel */
+  .mobile-categories-ready .category-section.mobile-categories-open
+  .category-grid,
+  .mobile-categories-ready .sds-category-section.mobile-categories-open
+  .sds-category-grid {
+    max-height: 360px;
+    opacity: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    visibility: visible;
+    margin-top: 14px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+  }
+
+  /* Make existing category cards more compact */
+  .mobile-categories-ready .category-grid > *,
+  .mobile-categories-ready .sds-category-grid > * {
+    min-width: 0;
+  }
+
+  /* Selected category indicator */
+  .mobile-category-active {
+    margin-top: 10px;
+    color: #526981;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .mobile-category-active strong {
+    color: #0b2543;
+  }
+
+  /* Results immediately follow the filter */
+  .library-results-heading,
+  .sds-results-heading {
+    scroll-margin-top: 105px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-category-toggle,
+  .mobile-category-chevron,
+  .mobile-categories-ready .category-grid,
+  .mobile-categories-ready .sds-category-grid {
+    transition: none !important;
+  }
+}
+
