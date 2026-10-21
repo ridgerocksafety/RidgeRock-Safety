@@ -52,79 +52,48 @@
     src="script.js"
     defer
   ></script>
+  <script src="navigation.js" defer></script>
 </head>
 
 <body>
 
   <!-- HEADER -->
   <header class="site-header">
-
-    <div class="shell header-inner">
-
-      <a
-        class="brand"
-        href="#top"
-        aria-label="Ridge Rock Safety Hub home"
-      >
-        <img
-          src="assets/ridge-rock-logo.png"
-          alt="Ridge Rock LLC logo"
-        >
-      </a>
-
-      <button
-        class="menu-button"
-        id="menuButton"
-        type="button"
-        aria-expanded="false"
-        aria-controls="mainNav"
-      >
-        Menu
-      </button>
-
-      <nav
-        class="main-nav"
-        id="mainNav"
-        aria-label="Primary navigation"
-      >
-
-        <a href="#announcements">
-          Announcements
-        </a>
-
-        <a href="#reporting">
-          Reporting
-        </a>
-
-        <a href="#toolbox">
-          Current Talk
-        </a>
-
-        <a href="toolbox-talks.html">
-          Talk Library
-        </a>
-
-        <a href="sds.html">
-          SDS Library
-        </a>
-
-        <a href="#resources">
-          Resources
-        </a>
-
-        <a href="#feedback">
-          Feedback
-        </a>
-
-        <a href="#contacts">
-          Contacts
-        </a>
-
-      </nav>
-
-    </div>
-
-  </header>
+  <div class="shell header-inner">
+    <a class="brand" href="index.html" aria-label="Ridge Rock Safety Hub home">
+      <img src="assets/ridge-rock-logo.png" alt="Ridge Rock LLC logo">
+    </a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav">
+      <span>Menu</span><span class="nav-menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+    <nav class="main-nav" id="mainNav" aria-label="Primary navigation">
+      <a class="nav-direct-link" href="index.html">Home</a>
+      <a class="nav-direct-link" href="index.html#reporting">Reporting</a>
+      <details class="nav-dropdown">
+        <summary class="nav-dropdown-toggle">Toolbox Talks <span class="nav-chevron" aria-hidden="true"></span></summary>
+        <div class="nav-dropdown-menu">
+          <a href="index.html#toolbox"><strong>Current Talk</strong><small>View this week's safety topic</small></a>
+          <a href="toolbox-talks.html"><strong>Talk Library</strong><small>Browse previous talks</small></a>
+        </div>
+      </details>
+      <details class="nav-dropdown">
+        <summary class="nav-dropdown-toggle">Resources <span class="nav-chevron" aria-hidden="true"></span></summary>
+        <div class="nav-dropdown-menu">
+          <a href="sds.html"><strong>SDS Library</strong><small>Safety Data Sheets</small></a>
+          <a href="index.html#resources"><strong>Safety Resources</strong><small>Policies, plans and documents</small></a>
+          <a href="index.html#announcements"><strong>Announcements</strong><small>Safety updates and reminders</small></a>
+        </div>
+      </details>
+      <details class="nav-dropdown">
+        <summary class="nav-dropdown-toggle">More <span class="nav-chevron" aria-hidden="true"></span></summary>
+        <div class="nav-dropdown-menu nav-dropdown-menu-right">
+          <a href="index.html#feedback"><strong>Safety Feedback</strong><small>Ideas and suggestions</small></a>
+          <a href="index.html#contacts"><strong>Safety Contacts</strong><small>Contact the safety team</small></a>
+        </div>
+      </details>
+    </nav>
+  </div>
+</header>
 
 
   <main id="top">
