@@ -362,10 +362,10 @@ const safetyHubData = {
   announcements: [
     {
       id: "foreman-safety-survey-2026",
-      title: "Foreman Safety Leadership Survey",
-      description: "Foremen are encouraged to complete the Safety Leadership Survey and share their feedback to help strengthen our safety program.",
-      category: "Employee Survey",
-      buttonText: "Complete Survey",
+      title: "Anonymous Foreman Safety Survey",
+      description: "Foremen: share your honest feedback to help improve safety leadership and jobsite practices. Responses are anonymous.",
+      category: "Feedback Requested",
+      buttonText: "Take Anonymous Survey",
       url: "https://forms.cloud.microsoft/r/TdX0A0JERg",
 
       active: true,
@@ -380,8 +380,8 @@ const safetyHubData = {
     },
     {
       id: "near-miss-reporting-reminder",
-      title: "Report Near Misses",
-      description: "A near miss is an opportunity to prevent a future incident. Report close calls and unsafe conditions so hazards can be addressed before someone gets hurt.",
+      title: "Report Near Misses & Close Calls",
+      description: "Spotted a close call or unsafe condition? Report it so we can address the hazard before someone gets hurt.",
       category: "Safety Reminder",
       buttonText: "Report a Near Miss",
       url: "https://forms.cloud.microsoft/r/jYkmUAKjwm",
@@ -398,10 +398,10 @@ const safetyHubData = {
     },
     {
       id: "employee-safety-feedback",
-      title: "Safety Feedback & Suggestions",
-      description: "Have an idea for improving safety? Use our feedback form to share suggestions, concerns, and opportunities for improvement.",
+      title: "Share a Safety Suggestion",
+      description: "Have a safety concern or an idea to make our jobsites safer? Send it directly to the safety team.",
       category: "Employee Feedback",
-      buttonText: "Submit Feedback",
+      buttonText: "Share Feedback",
       url: "https://forms.cloud.microsoft/r/Lfj9UGA7SE",
 
       active: true,
