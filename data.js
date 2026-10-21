@@ -3,7 +3,7 @@
   RIDGE ROCK SAFETY HUB DATA
   --------------------------
   This is the main file you update when adding reports, resources,
-  contacts, or toolbox talks.
+  contacts, toolbox talks, or announcements.
 
   IMPORTANT:
   - Keep commas between each item.
@@ -12,7 +12,7 @@
 */
 
 const safetyHubData = {
-  lastUpdated: "October 19, 2026",
+  lastUpdated: "October 21, 2026",
 
   quickLinks: [
     {
@@ -48,7 +48,6 @@ const safetyHubData = {
       active: true
     },
     {
-      title: "Incident Response",
       title: "Incident Guide",
       description: "Immediate response guidance to help you take the right steps, make the right calls, and keep the situation under control.",
       url: "incident-response.html",
@@ -324,6 +323,96 @@ const safetyHubData = {
       fileName: "Toolbox Talk 021 - Jobsite Housekeeping.pdf",
       keywords: "jobsite housekeeping clean organized debris trash waste disposal walkways access routes material storage slips trips falls fire prevention",
       active: true
+    }
+  ],
+
+  /*
+    ANNOUNCEMENTS
+    -------------
+    Each announcement can appear on the homepage.
+
+    active:
+      true  = enabled
+      false = completely hidden
+
+    featured:
+      true  = highlighted announcement
+      false = standard announcement
+
+    startDate:
+      First date the announcement appears.
+
+    endDate:
+      Last date the announcement appears.
+      Set to null for no expiration date.
+
+    popup:
+      true  = enable popup notification
+      false = homepage announcement only
+
+    popupType:
+      "corner" = compact notification
+      "modal"  = large centered popup
+
+    popupVersion:
+      Increase this number to show a popup again
+      to employees who previously dismissed it.
+  */
+
+  announcements: [
+    {
+      id: "foreman-safety-survey-2026",
+      title: "Foreman Safety Leadership Survey",
+      description: "Foremen are encouraged to complete the Safety Leadership Survey and share their feedback to help strengthen our safety program.",
+      category: "Employee Survey",
+      buttonText: "Complete Survey",
+      url: "https://forms.cloud.microsoft/r/TdX0A0JERg",
+
+      active: true,
+      featured: true,
+
+      startDate: "2026-10-21",
+      endDate: null,
+
+      popup: true,
+      popupType: "corner",
+      popupVersion: 1
+    },
+    {
+      id: "near-miss-reporting-reminder",
+      title: "Report Near Misses",
+      description: "A near miss is an opportunity to prevent a future incident. Report close calls and unsafe conditions so hazards can be addressed before someone gets hurt.",
+      category: "Safety Reminder",
+      buttonText: "Report a Near Miss",
+      url: "https://forms.cloud.microsoft/r/jYkmUAKjwm",
+
+      active: true,
+      featured: false,
+
+      startDate: "2026-10-21",
+      endDate: null,
+
+      popup: false,
+      popupType: "corner",
+      popupVersion: 1
+    },
+    {
+      id: "employee-safety-feedback",
+      title: "Safety Feedback & Suggestions",
+      description: "Have an idea for improving safety? Use our feedback form to share suggestions, concerns, and opportunities for improvement.",
+      category: "Employee Feedback",
+      buttonText: "Submit Feedback",
+      url: "https://forms.cloud.microsoft/r/Lfj9UGA7SE",
+
+      active: true,
+      featured: false,
+
+      startDate: "2026-10-21",
+      endDate: null,
+
+      popup: false,
+      popupType: "corner",
+      popupVersion: 1
     }
   ]
 };
