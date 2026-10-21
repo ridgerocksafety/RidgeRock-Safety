@@ -3,318 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <meta
-    name="description"
-    content="Browse and search Ridge Rock Toolbox Talks by safety category or topic."
-  >
-
+  <meta name="description" content="Browse and search Ridge Rock Toolbox Talks by safety category or topic.">
   <title>Toolbox Talk Library | Ridge Rock Safety Hub</title>
-
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="toolbox-library.css">
-
   <script src="data.js" defer></script>
   <script src="toolbox-library.js" defer></script>
+  <script src="navigation.js" defer></script>
 </head>
-
 <body>
-
   <header class="site-header">
-    <div class="shell header-inner">
-
-      <a
-        class="brand"
-        href="index.html"
-        aria-label="Ridge Rock Safety Hub home"
-      >
-        <img
-          src="assets/ridge-rock-logo.png"
-          alt="Ridge Rock LLC logo"
-        >
-      </a>
-
-      <button
-        class="menu-button"
-        id="menuButton"
-        type="button"
-        aria-expanded="false"
-        aria-controls="mainNav"
-      >
-        Menu
-      </button>
-
-      <nav
-        class="main-nav"
-        id="mainNav"
-        aria-label="Primary navigation"
-      >
-        <a href="index.html#reporting">Reporting</a>
-        <a href="index.html#toolbox">Current Talk</a>
-        <a href="toolbox-talks.html" aria-current="page">Talk Library</a>
-        <a href="sds.html">SDS Library</a>
-        <a href="index.html#resources">Resources</a>
-        <a href="index.html#contacts">Contacts</a>
-      </nav>
-
-    </div>
-  </header>
-
+  <div class="shell header-inner">
+    <a class="brand" href="index.html" aria-label="Ridge Rock Safety Hub home">
+      <img src="assets/ridge-rock-logo.png" alt="Ridge Rock LLC logo">
+    </a>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav">
+      <span>Menu</span><span class="nav-menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+    <nav class="main-nav" id="mainNav" aria-label="Primary navigation">
+      <a class="nav-direct-link" href="index.html">Home</a>
+      <a class="nav-direct-link" href="index.html#reporting">Reporting</a>
+      <details class="nav-dropdown">
+        <summary class="nav-dropdown-toggle">Toolbox Talks <span class="nav-chevron" aria-hidden="true"></span></summary>
+        <div class="nav-dropdown-menu">
+          <a href="index.html#toolbox"><strong>Current Talk</strong><small>View this week's safety topic</small></a>
+          <a href="toolbox-talks.html"><strong>Talk Library</strong><small>Browse previous talks</small></a>
+        </div>
+      </details>
+      <details class="nav-dropdown">
+        <summary class="nav-dropdown-toggle">Resources <span class="nav-chevron" aria-hidden="true"></span></summary>
+        <div class="nav-dropdown-menu">
+          <a href="sds.html"><strong>SDS Library</strong><small>Safety Data Sheets</small></a>
+          <a href="index.html#resources"><strong>Safety Resources</strong><small>Policies, plans and documents</small></a>
+          <a href="index.html#announcements"><strong>Announcements</strong><small>Safety updates and reminders</small></a>
+        </div>
+      </details>
+      <details class="nav-dropdown">
+        <summary class="nav-dropdown-toggle">More <span class="nav-chevron" aria-hidden="true"></span></summary>
+        <div class="nav-dropdown-menu nav-dropdown-menu-right">
+          <a href="index.html#feedback"><strong>Safety Feedback</strong><small>Ideas and suggestions</small></a>
+          <a href="index.html#contacts"><strong>Safety Contacts</strong><small>Contact the safety team</small></a>
+        </div>
+      </details>
+    </nav>
+  </div>
+</header>
 
   <main id="top">
-
     <section class="library-hero">
       <div class="shell library-hero-inner">
-
         <div>
           <p class="eyebrow">Weekly Safety Training</p>
-
           <h1>Toolbox Talk Library</h1>
-
           <p class="library-hero-lead">
-            Search the complete Ridge Rock Toolbox Talk archive
-            or browse by safety category.
+            Search the complete Ridge Rock Toolbox Talk archive or browse by safety category.
           </p>
         </div>
 
-        <a
-          class="button button-light"
-          href="index.html#toolbox"
-        >
+        <a class="button button-light" href="index.html#toolbox">
           ← Back to Current Talk
         </a>
-
       </div>
     </section>
 
-
     <section class="section library-section">
       <div class="shell">
-
         <div class="library-summary">
-
           <div>
             <p class="eyebrow">Browse the Archive</p>
-
             <h2>Find the right safety topic fast.</h2>
-
-            <p>
-              Search by number, title, category,
-              description, or keyword.
-            </p>
+            <p>Search by number, title, category, description, or keyword.</p>
           </div>
 
           <div class="library-total">
             <strong id="libraryTotal">0</strong>
             <span>talks available</span>
           </div>
-
         </div>
 
-
-        <!-- SEARCH -->
-        <div
-          class="library-search-area"
-          id="librarySearchArea"
-        >
-
-          <form
-            class="library-search-wrap"
-            id="librarySearchForm"
-            role="search"
-          >
-
-            <label
-              class="sr-only"
-              for="librarySearch"
-            >
-              Search toolbox talks
-            </label>
-
-            <span
-              class="library-search-icon"
-              aria-hidden="true"
-            >
-              ⌕
-            </span>
-
-            <input
-              id="librarySearch"
-              type="search"
-              placeholder="Search toolbox talks..."
-              autocomplete="off"
-              aria-autocomplete="list"
-              aria-controls="librarySuggestions"
-              aria-expanded="false"
-            >
-
-            <div
-              class="library-search-actions"
-              id="librarySearchActions"
-              aria-hidden="true"
-            >
-
-              <button
-                class="library-clear-search"
-                id="libraryClearSearch"
-                type="button"
-                aria-label="Clear search"
-              >
-                ×
-              </button>
-
-              <button
-                class="library-search-button"
-                id="librarySearchButton"
-                type="submit"
-              >
-                Search
-              </button>
-
-            </div>
-
-          </form>
-
-
-          <!-- AUTOCOMPLETE SUGGESTIONS -->
-          <div
-            class="library-suggestions"
-            id="librarySuggestions"
-            role="listbox"
-            aria-label="Toolbox Talk suggestions"
-          ></div>
-
-
-          <p
-            class="library-search-status"
-            id="librarySearchStatus"
-            aria-live="polite"
-          ></p>
-
+        <div class="library-search-wrap">
+          <label class="sr-only" for="librarySearch">Search toolbox talks</label>
+          <span class="library-search-icon" aria-hidden="true">⌕</span>
+          <input id="librarySearch" type="search" placeholder="Search toolbox talks..." autocomplete="off">
+          <button id="libraryClearSearch" type="button" hidden aria-label="Clear search">×</button>
         </div>
 
-
-        <!-- CATEGORIES -->
-        <div
-          class="category-section"
-          id="categorySection"
-        >
-
-          <div class="category-header">
-
-            <div>
-              <h2>Browse by Category</h2>
-
-              <p>
-                View all talks or choose a category
-                to filter the archive.
-              </p>
-            </div>
-
-            <button
-              class="category-reset"
-              id="categoryReset"
-              type="button"
-              hidden
-            >
-              Clear Category
-            </button>
-
-          </div>
-
-          <div
-            class="category-grid"
-            id="categoryGrid"
-            aria-label="Toolbox Talk categories"
-          ></div>
-
-        </div>
-
-
-        <!-- RESULTS -->
-        <div
-          class="library-results-heading"
-          id="libraryResults"
-        >
-
+        <div class="category-header">
           <div>
-            <p
-              class="eyebrow"
-              id="resultsEyebrow"
-            >
-              Toolbox Talk Archive
-            </p>
+            <h2>Browse by Category</h2>
+            <p>Select a category to filter the archive. Select it again to clear the filter.</p>
+          </div>
+          <button class="category-reset" id="categoryReset" type="button" hidden>Clear category</button>
+        </div>
 
-            <h2 id="resultsTitle">
-              All Toolbox Talks
-            </h2>
+        <div class="category-grid" id="categoryGrid" aria-label="Toolbox Talk categories"></div>
 
-            <p id="resultsDescription">
-              Browse all Toolbox Talks from newest to oldest.
-            </p>
+        <div class="library-results-heading">
+          <div>
+            <p class="eyebrow" id="resultsEyebrow">Recently Added</p>
+            <h2 id="resultsTitle">Latest Toolbox Talks</h2>
+            <p id="resultsDescription">The newest talks in the Ridge Rock safety library.</p>
           </div>
 
+          <button class="button button-outline" id="viewAllTalks" type="button">View All Talks</button>
         </div>
 
+        <div class="talk-grid" id="libraryTalkGrid" aria-live="polite"></div>
 
-        <div
-          class="talk-grid"
-          id="libraryTalkGrid"
-          aria-live="polite"
-        ></div>
-
-
-        <div
-          class="empty-state"
-          id="libraryEmptyState"
-          hidden
-        >
-          <h3>No Toolbox Talks found</h3>
-
-          <p>
-            Try a different search term or safety category.
-          </p>
+        <div class="empty-state" id="libraryEmptyState" hidden>
+          <h3>No toolbox talks found</h3>
+          <p>Try a different search term or safety category.</p>
         </div>
-
       </div>
     </section>
-
   </main>
-
-
-  <!-- FLOATING BACK TO CATEGORIES -->
-  <button
-    class="back-to-categories"
-    id="backToCategories"
-    type="button"
-    aria-label="Back to Toolbox Talk categories"
-  >
-    <span aria-hidden="true">↑</span>
-
-    <span class="back-to-categories-text">
-      Back to Categories
-    </span>
-  </button>
-
 
   <footer class="site-footer">
     <div class="shell footer-inner">
-
       <div>
-        <img
-          src="assets/ridge-rock-logo.png"
-          alt=""
-          aria-hidden="true"
-        >
-
+        <img src="assets/ridge-rock-logo.png" alt="" aria-hidden="true">
         <p>Work Safe. Go Home Safe.</p>
       </div>
-
       <p id="lastUpdated"></p>
-
     </div>
   </footer>
-
 </body>
 </html>
