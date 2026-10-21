@@ -562,6 +562,7 @@ document.addEventListener("DOMContentLoaded", () => {
     popupLink &&
     popupClose &&
     popupDismiss &&
+    window.location.hash.toLowerCase() !== "#toolbox" &&
     popupAnnouncements.length > 0
   ) {
 
