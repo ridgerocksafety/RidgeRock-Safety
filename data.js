@@ -12,7 +12,7 @@
 */
 
 const safetyHubData = {
-  lastUpdated: "October 21, 2026",
+  lastUpdated: "November 2, 2026",
 
   quickLinks: [
     {
@@ -331,6 +331,15 @@ const safetyHubData = {
       description: "Reinforcing OSHA's 5-foot rule, sloping and benching requirements, trench protective systems, and excavation safety compliance.",
       fileName: "2026-10-26 Toolbox Talk 022 - TRENCH CAVE-IN PREVENTION.pdf",
       keywords: "trench excavation cave in prevention OSHA 5 foot rule sloping benching trench box shoring protective systems soil classification competent person",
+      active: true
+    },
+    {
+      number: 23,
+      title: "Pinch Point & Crush Hazards",
+      category: "Injury Prevention",
+      description: "Recognizing pinch points and crush zones, safe positioning around heavy equipment, operator communication, and safe material handling.",
+      fileName: "Toolbox Talk 023 - Pinch Point & Crush Hazards.pdf",
+      keywords: "pinch point crush hazards caught in between heavy equipment moving materials excavator swing radius safe positioning OSHA injury prevention",
       active: true
     }
   ],
