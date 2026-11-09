@@ -12,7 +12,7 @@
 */
 
 const safetyHubData = {
-  lastUpdated: "November 2, 2026",
+  lastUpdated: "November 9, 2026",
 
   quickLinks: [
     {
@@ -340,6 +340,15 @@ const safetyHubData = {
       description: "Recognizing pinch points and crush zones, safe positioning around heavy equipment, operator communication, and safe material handling.",
       fileName: "Toolbox Talk 023 - Pinch Point & Crush Hazards.pdf",
       keywords: "pinch point crush hazards caught in between heavy equipment moving materials excavator swing radius safe positioning OSHA injury prevention",
+      active: true
+    },
+    {
+      number: 24,
+      title: "Pre-Task Planning & Hazard Awareness",
+      category: "General Safety",
+      description: "Identifying jobsite hazards, conducting JHAs and pre-task planning, assigning crew responsibilities, and improving safety through communication.",
+      fileName: "Toolbox Talk 024 - Pre-Task Planning & Hazard Awareness.pdf",
+      keywords: "pre-task planning hazard awareness job hazard analysis JHA daily safety huddle crew responsibilities communication productivity risk assessment safety controls jobsite",
       active: true
     }
   ],
