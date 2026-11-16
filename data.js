@@ -12,7 +12,7 @@
 */
 
 const safetyHubData = {
-  lastUpdated: "November 9, 2026",
+  lastUpdated: "November 16, 2026",
 
   quickLinks: [
     {
@@ -349,6 +349,15 @@ const safetyHubData = {
       description: "Identifying jobsite hazards, conducting JHAs and pre-task planning, assigning crew responsibilities, and improving safety through communication.",
       fileName: "Toolbox Talk 024 - Pre-Task Planning & Hazard Awareness.pdf",
       keywords: "pre-task planning hazard awareness job hazard analysis JHA daily safety huddle crew responsibilities communication productivity risk assessment safety controls jobsite",
+      active: true
+    },
+    {
+      number: 25,
+      title: "Safe Material Handling",
+      category: "Material Handling",
+      description: "Preventing back strains and lifting injuries, safely carrying materials on stairs and uneven ground, and planning material movement to reduce unnecessary strain.",
+      fileName: "Toolbox Talk 025 - Safe Material Handling.pdf",
+      keywords: "safe material handling back strain lifting techniques ergonomics asphalt shoveling carrying materials stairs safe footing repetitive lifting OSHA foreman material staging injury prevention",
       active: true
     }
   ],
