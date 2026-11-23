@@ -12,7 +12,7 @@
 */
 
 const safetyHubData = {
-  lastUpdated: "November 16, 2026",
+  lastUpdated: "November 23, 2026",
 
   quickLinks: [
     {
@@ -358,6 +358,15 @@ const safetyHubData = {
       description: "Preventing back strains and lifting injuries, safely carrying materials on stairs and uneven ground, and planning material movement to reduce unnecessary strain.",
       fileName: "Toolbox Talk 025 - Safe Material Handling.pdf",
       keywords: "safe material handling back strain lifting techniques ergonomics asphalt shoveling carrying materials stairs safe footing repetitive lifting OSHA foreman material staging injury prevention",
+      active: true
+    },
+    {
+      number: 26,
+      title: "PPE — Maintaining the Standard",
+      category: "PPE",
+      description: "Reinforcing Ridge Rock's mandatory jobsite PPE, including hard hats, safety glasses, composite-toe safety footwear, and high-visibility vests, with emphasis on consistent use and foreman accountability.",
+      fileName: "Toolbox Talk 026 - PPE Maintaining the Standard.pdf",
+      keywords: "PPE personal protective equipment hard hat safety glasses composite toe boots safety footwear high visibility vest no excuses consistent PPE compliance foreman accountability jobsite safety",
       active: true
     }
   ],
